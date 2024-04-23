@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Traits\CanLoadRelationships;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class EventController extends Controller
 {
@@ -28,7 +29,7 @@ class EventController extends Controller
         // );
 
         // $query = $this->loadRelationships(Event::query());
-        $query = Event::when(true, fn($q) => $q->with('user','attendees', 'attendees.user'));
+        $query = Event::when(true, fn($q) => $q->with('user', 'attendees', 'attendees.user'));
         $events = EventResource::collection($query->paginate());
         return $this->success($events, "data is here", 200, true);
     }
@@ -57,11 +58,27 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        $event->load('user', 'attendees');
-        $event = new EventResource($event);
-        return $this->success($event, "data is here", 200);
+        // dd($id);
+        try {
+            // $event = Event::findOrFail($id);
+            $event->load('user', 'attendees');
+            $event = new EventResource($event);
+            // return $this;
+            return $this->success($event, "data is here", 200);
+            // $event = Event::findOrFail($id);
+            // return $event;
+        } catch (\Exception $e) {
+            return $this->error("Event Not Found.", 404);
+        }
     }
-
+    // public function show(Event $event)
+    // {
+    //     try {
+    //         $event->load('user', 'attendees');
+    //         $event = new EventResource($event);
+    //         return $this->success($event, "Data is here", 200);
+    //     }
+    // }
     /**
      * Update the specified resource in storage.
      */
