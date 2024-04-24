@@ -16,8 +16,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(User::class);
             $table->text('course_name');
-            // $table->string('course_image')->nullable();
-
+            $table->string('image')->nullable();
             $table->longText('description')->nullable();
             // $table->string('video')->nullable();
             // $table->string('label')->nullable();

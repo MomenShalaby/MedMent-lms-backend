@@ -6,11 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CourseResource;
 use App\Models\Course;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Traits\HttpResponses;
+use App\Traits\FileUploader;
+use Illuminate\Support\Facades\Validator;
 
 class CourseController extends Controller
 {
     use HttpResponses;
+    use FileUploader;
     /**
      * Display a listing of the resource.
      */
@@ -40,13 +44,17 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
+
+
         $course = Course::create([
             ...$request->validate([
                 'course_name' => 'required|max:255',
                 'description' => 'nullable',
+                'image' => 'required|image:jpeg,png,jpg,gif,svg|max:2048'
             ]),
             'user_id' => 1
         ]);
+        $this->uploadImage($request, $course, "course");
         $course = new CourseResource($course);
         return $this->success($course, "data inserted", 201);
     }

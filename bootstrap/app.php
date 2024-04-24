@@ -1,9 +1,11 @@
 <?php
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -26,4 +28,19 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
+        // if ($exceptions instanceof ModelNotFoundException) {
+    
+        //     throw new NotFoundHttpException("Unable to locate the you requested.");
+        // }
+
+
+        
+//         $exceptions->report(function (ModelNotFoundException $e) {
+//             throw new NotFoundHttpException("Unable to locate the you requested.");
+//         });
+//         $exceptions->renderable(function (NotFoundHttpException $e) {
+//             return response()->json([
+// [                'message' => 'Record not found.'
+// ]            ], 404);
+//         });
     })->create();

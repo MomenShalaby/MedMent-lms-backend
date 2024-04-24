@@ -13,7 +13,7 @@ class Course extends Model
     use HasFactory;
     // use HasUuids;
 
-    protected $fillable = ['course_name', 'user_id', 'description'];
+    protected $fillable = ['course_name', 'user_id', 'description','image'];
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
