@@ -18,17 +18,22 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             PermissionSeeder::class,
             AdminSeeder::class,
+            SubscriptionSeeder::class,
+            CountrySeeder::class,
+            StateSeeder::class,
         ]);
 
         User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
+            'fname' => 'Test',
+            'lname' => 'User',
             'email' => 'test@example.com',
         ]);
-        $this->call(CourseSeeder::class);
-        $this->call(EventSeeder::class);
-        $this->call(AttendeeSeeder::class);
-
+        $this->call([
+            CourseSeeder::class,
+            EventSeeder::class,
+            AttendeeSeeder::class,
+        ]);
     }
 }
