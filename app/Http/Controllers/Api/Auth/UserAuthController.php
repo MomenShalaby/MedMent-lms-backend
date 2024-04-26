@@ -29,6 +29,8 @@ class UserAuthController extends Controller
             'password' => Hash::make($request->password),
             'gender' => $request->gender,
             'subscription_id' => $request->subscription_id,
+            'country_id' => $request->country_id,
+            'state_id' => $request->state_id,
         ]);
         // $user->assignRole('user');
 

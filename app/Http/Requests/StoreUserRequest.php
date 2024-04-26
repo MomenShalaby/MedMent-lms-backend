@@ -33,6 +33,8 @@ class StoreUserRequest extends FormRequest
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'gender' => ['required', Rule::enum(Gender::class)],
             'subscription_id' => ['required', 'exists:subscriptions,id'],
+            'country_id' => ['required', 'exists:countries,id'],
+            'state_id' => ['required', 'exists:states,id'],
         ];
     }
 }
