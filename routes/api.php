@@ -46,11 +46,11 @@ Route::middleware('auth:api')->controller(ProfileController::class)->prefix('/pr
     Route::delete('edit', 'destroy');
 });
 
-Route::middleware('auth:api')->controller(UserExperienceController::class)->group(function () {
+Route::middleware('auth:api')->controller(ExperienceController::class)->group(function () {
     Route::get('/users/{user}/experiences', 'index');
     Route::post('/experiences', 'store');
-    Route::put('/experiences/{experience}', 'update')->middleware('can:update,experience}');
-    Route::delete('/{experience}', 'destroy')->middleware('can:delete,experience}');
+    Route::put('/experiences/{experience}', 'update')->middleware('can:update,experience');
+    Route::delete('/experiences/{experience}', 'destroy')->middleware('can:delete,experience');
 });
 
 Route::controller(ProfileController::class)->prefix('profile/{user}')->group(function () {

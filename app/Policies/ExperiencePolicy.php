@@ -11,16 +11,20 @@ class ExperiencePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Experience $experience): bool
+    public function update(User $user, Experience $experience): Response
     {
-        return $experience->user_id === $user->id;
+        return $experience->user_id === $user->id
+            ? Response::allow()
+            : Response::deny('You do not own this experience.');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Experience $experience): bool
+    public function delete(User $user, Experience $experience): Response
     {
-        return $experience->user_id === $user->id;
+        return $experience->user_id === $user->id
+            ? Response::allow()
+            : Response::deny('You do not own this experience.');
     }
 }
