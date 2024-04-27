@@ -3,9 +3,12 @@
 use App\Http\Controllers\Api\Auth\UserAuthController;
 use App\Http\Controllers\Api\AttendeeController;
 use App\Http\Controllers\Api\CountryController;
+use App\Http\Controllers\Api\CountryStateController;
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\ExperienceController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\UserExperienceController;
 use App\Http\Controllers\StateController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +46,13 @@ Route::middleware('auth:api')->controller(ProfileController::class)->prefix('/pr
     Route::delete('edit', 'destroy');
 });
 
+Route::middleware('auth:api')->controller(UserExperienceController::class)->group(function () {
+    Route::get('/users/{user}/experiences', 'index');
+    Route::post('/experiences', 'store');
+    Route::put('/experiences/{experience}', 'update')->middleware('can:update,experience}');
+    Route::delete('/{experience}', 'destroy')->middleware('can:delete,experience}');
+});
+
 Route::controller(ProfileController::class)->prefix('profile/{user}')->group(function () {
     Route::get('/', 'index')->name('index');
 });
@@ -51,5 +61,5 @@ Route::controller(ProfileController::class)->prefix('profile/{user}')->group(fun
 //countries & states
 Route::get('/countries', [CountryController::class, 'index']);
 Route::get('/countries/{country}', [CountryController::class, 'show']);
-Route::get('/countries/{country}/states', [StateController::class, 'index']);
+Route::get('/countries/{country}/states', [CountryStateController::class, 'index']);
 

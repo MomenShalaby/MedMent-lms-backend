@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use App\Enums\Enums\Gender;
 use App\Enums\Enums\SubscriptionType;
+use App\Models\Country;
+use App\Models\State;
 use App\Models\Subscription;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -33,9 +35,10 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'gender' => fake()->randomElement(Gender::cases()),
-            // 'user_id' => User::all()->random()->id,
-            'subscription_id' => Subscription::all()->random()->id,
-            // 'subscription_type' => fake()->randomElement(SubscriptionType::cases()),
+            'bio' => fake()->text(),
+            'subscription_id' => Subscription::pluck('id')->random(),
+            'country_id' => Country::pluck('id')->random(),
+            'state_id' => State::pluck('id')->random(),
             'remember_token' => Str::random(10),
         ];
     }

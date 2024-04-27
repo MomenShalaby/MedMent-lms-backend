@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Admin;
+use App\Models\Experience;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -21,16 +22,8 @@ class DatabaseSeeder extends Seeder
             SubscriptionSeeder::class,
             CountrySeeder::class,
             StateSeeder::class,
-        ]);
-
-        User::factory(10)->create();
-
-        User::factory()->create([
-            'fname' => 'Test',
-            'lname' => 'User',
-            'email' => 'test@example.com',
-        ]);
-        $this->call([
+            HospitalSeeder::class,
+            UserSeeder::class,
             CourseSeeder::class,
             EventSeeder::class,
             AttendeeSeeder::class,

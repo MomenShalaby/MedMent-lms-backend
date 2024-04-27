@@ -12,12 +12,15 @@ return new class extends Migration {
     {
         Schema::create('experiences', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('title');
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->text('description')->nullable();
-            $table->foreignId('hospital_id')->constrained();
-            $table->string('otherHospital');
+            $table->foreignId('hospital_id')->nullable()->constrained();
+            $table->string('otherHospital', 100)->nullable();
+            $table->foreignId('country_id')->constrained();
+            $table->foreignId('state_id')->constrained();
             $table->timestamps();
         });
     }

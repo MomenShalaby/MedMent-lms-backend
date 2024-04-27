@@ -9,8 +9,9 @@ trait HttpResponses
     protected function success($data, $message = null, $code = 200, $pagination = false)
     {
         $responseData = [
-            'status' => 'Request was successful.',
+            'success' => true,
             'message' => $message,
+            'statusCode' => $code,
             'data' => $data,
         ];
 
@@ -31,8 +32,9 @@ trait HttpResponses
     protected function error($message, $code = 500)
     {
         return response()->json([
-            'status' => 'Error',
+            'success' => false,
             'message' => $message,
+            'statusCode' => $code,
         ], $code);
     }
 }

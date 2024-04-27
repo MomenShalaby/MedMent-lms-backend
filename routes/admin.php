@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\Auth\AdminAuthController;
+use App\Http\Controllers\Api\HospitalController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\SubscriptionController;
@@ -25,6 +26,7 @@ Route::middleware(['auth:admin', 'role:super_admin'])->group(function () {
     Route::get('permissions', [PermissionController::class, 'index']);
     Route::apiResource('users', UserController::class)->only(['index', 'show']);
     Route::apiResource('admins', AdminController::class);
+    Route::apiResource('hospitals', HospitalController::class)->except('show');
 
     //sub routes
     Route::get('subscriptions', [SubscriptionController::class, 'index']);
