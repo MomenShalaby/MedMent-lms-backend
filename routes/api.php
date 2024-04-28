@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\CountryStateController;
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\DegreeController;
+use App\Http\Controllers\Api\EducationController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ExperienceController;
 use App\Http\Controllers\Api\ProfileController;
@@ -59,6 +60,13 @@ Route::get('/countries', [CountryController::class, 'index']);
 Route::get('/countries/{country}', [CountryController::class, 'show']);
 Route::get('/countries/{country}/states', [CountryStateController::class, 'index']);
 
+//education routes
 Route::get('/universities', [UniversityController::class, 'index']);
 Route::get('/degrees', [DegreeController::class, 'index']);
+Route::middleware('auth:api')->controller(EducationController::class)->group(function () {
+    Route::get('/users/{user}/education', 'index');
+    Route::post('/education', 'store');
+    Route::put('/education/{education}', 'update')->middleware('can:update,education');
+    Route::delete('/education/{education}', 'destroy')->middleware('can:delete,education');
+});
 

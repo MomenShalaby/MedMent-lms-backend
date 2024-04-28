@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Experience;
 use App\Models\User;
+use App\Traits\CanLoadRelationships;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,14 +13,18 @@ use Illuminate\Support\Facades\Auth;
 class ExperienceController extends Controller
 {
     use HttpResponses;
+    use CanLoadRelationships;
+    private $relations = ['user', 'hospital', 'country', 'state'];
+
+
     /**
      * Display a listing of the resource.
      */
     public function index(User $user)
     {
-        $experiences = $user->experiences;
+        $experiences = $this->loadRelationships($user->experiences());
         return $this->success([
-            "experiences" => $experiences
+            "experiences" => $experiences->get()
         ]);
     }
 
