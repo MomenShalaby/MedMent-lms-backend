@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Enums\Enums\Gender;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\StoreUserRequest;
@@ -20,10 +21,16 @@ class UserAuthController extends Controller
     public function register(StoreUserRequest $request): JsonResponse
     {
         $request->validated($request->all());
+        // return $request;
         $user = User::create([
-            'name' => $request->name,
+            'fname' => $request->fname,
+            'lname' => $request->lname,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'gender' => $request->gender,
+            'subscription_id' => $request->subscription_id,
+            'country_id' => $request->country_id,
+            'state_id' => $request->state_id,
         ]);
         // $user->assignRole('user');
 

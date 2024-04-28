@@ -24,7 +24,7 @@ class AdminAuthController extends Controller
 
         $token = Auth::guard('admin')->attempt($credentials);
         if (!$token) {
-            return $this->error('', 'Credentials do not match', 401);
+            return $this->error('Credentials do not match', 401);
         }
         $user = Auth::guard('admin')->user();
         return $this->success([

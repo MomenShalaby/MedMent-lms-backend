@@ -2,6 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Enums\Enums\Gender;
+use App\Enums\Enums\SubscriptionType;
+use App\Models\Country;
+use App\Models\State;
+use App\Models\Subscription;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -24,10 +29,16 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'fname' => fake()->firstName(),
+            'lname' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'gender' => fake()->randomElement(Gender::cases()),
+            'bio' => fake()->text(),
+            'subscription_id' => Subscription::pluck('id')->random(),
+            'country_id' => Country::pluck('id')->random(),
+            'state_id' => State::pluck('id')->random(),
             'remember_token' => Str::random(10),
         ];
     }
@@ -37,7 +48,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
     }

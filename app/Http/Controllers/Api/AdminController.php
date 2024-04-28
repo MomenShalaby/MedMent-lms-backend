@@ -4,81 +4,71 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Traits\CanLoadRelationships;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
     use HttpResponses;
-    /**
-     * Display a listing of the resource.
-     */
+    use CanLoadRelationships;
+    private $relations = ['roles'];
+
     public function index()
     {
         $superAdminId = Admin::role('super_admin')->first(['id'])->id;
-        $admins = Admin::all()->except($superAdminId);
+        $query = $this->loadRelationships(Admin::query());
+        $admins = $query->get()->except($superAdminId);
         return $this->success(
             $admins,
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string'],
+            'fname' => ['required', 'string'],
+            'lname' => ['required', 'string'],
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
-            'role' => ['sometimes', 'string'],
+            'role' => ['sometimes', 'string', 'exists:roles,name'],
         ]);
         $admin = Admin::create($request->except('role'));
         $admin->assignRole($request->role);
+
         return $this->success([
-            "createdAdmin" => $admin,
-            "createdAdminRoles" => $admin->roles,   //TODO: duplicate data in the response
-        ]);
+            "admin" => $admin->load('roles'),
+        ], 'Admin created successfully', 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Admin $admin)
     {
         return $this->success([
-            "admin" => $admin,
-            "roles" => $admin->roles,
+            "admin" => $this->loadRelationships($admin),
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Admin $admin)
     {
         $request->validate([
-            'name' => ['required_without_all:email,password,role', 'string'],
-            'email' => ['required_without_all:name,password,role', 'string', 'email'],
-            'password' => ['required_without_all:name,email,role', 'string'],
-            'role' => ['required_without_all:name,email,password', 'string'],
+            'fname' => ['required_without_all:lname,email,password,role', 'string'],
+            'lname' => ['required_without_all:fname,email,password,role', 'string'],
+            'email' => ['required_without_all:fname,lname,password,role', 'string', 'email'],
+            'password' => ['required_without_all:fname,lname,email,role', 'string'],
+            'role' => ['required_without_all:fname,lname,email,password', 'string', 'exists:roles,name'],
         ]);
-        if ($request->name || $request->email || $request->password) {
+        if ($request->fname || $request->lname || $request->email || $request->password) {
             $admin->update($request->except('role'));
         }
         if ($request->role) {
             $admin->syncRoles([$request->role]);
         }
         return $this->success([
-            "admin" => $admin,
-            "roles" => $admin->roles,
+            "admin" => $admin->load('roles'),
         ]);
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Admin $admin)
     {
         $admin->delete();

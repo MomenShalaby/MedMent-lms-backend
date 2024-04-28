@@ -3,9 +3,16 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\Enums\Gender;
+use App\Enums\Enums\SubscriptionType;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -19,9 +26,14 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'fname',
+        'lname',
         'email',
         'password',
+        'gender',
+        'subscription_id',
+        'country_id',
+        'state_id',
     ];
 
     /**
@@ -44,7 +56,43 @@ class User extends Authenticatable implements JWTSubject
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'gender' => Gender::class,
+            // 'subscription_type' => SubscriptionType::class,
         ];
+    }
+
+    protected function avatar(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value === 'doctor.png' || $value === 'fdoctor.png' ? $value : "/storage/avatars/$value",
+        );
+        // $user = Auth::user();
+        // $avatar = $user->gender = 'female' ? 'fdoctor.png' : 'doctor.png';
+        // return Attribute::make(
+        //     get: fn($value) => $value ? "/storage/avatars/$value" : $avatar,
+        // );
+        // return Attribute::make(
+        //     get: fn($value) => Str::endsWith($value, '.svg') ? "/avatars/$value" : "/storage/uploadedAvatars/$value",
+        // );
+    }
+
+    public function subscription(): BelongsTo
+    {
+        return $this->belongsTo(Subscription::class);
+    }
+
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+    public function state(): BelongsTo
+    {
+        return $this->belongsTo(State::class);
+    }
+
+    public function experiences(): HasMany
+    {
+        return $this->hasMany(Experience::class);
     }
 
     /**
