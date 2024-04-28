@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\Auth\AdminAuthController;
 use App\Http\Controllers\Api\DegreeController;
+use App\Http\Controllers\Api\CourseController;
+use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\HospitalController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RoleController;
@@ -57,3 +59,24 @@ Route::middleware('auth:admin')->controller(DegreeController::class)->prefix('de
     Route::delete('/{degree}', 'destroy')->middleware('permission:degree-delete');
 });
 
+
+
+// Courses routes
+Route::get('/courses', [CourseController::class, 'index']);
+Route::get('/courses/{course}', [CourseController::class, 'show']);
+Route::middleware('auth:admin')->controller(CourseController::class)->prefix('courses')->group(function () {
+    Route::post('/', 'store')->middleware('permission:course-create');
+    Route::put('/{courses}', 'update')->middleware('permission:course-edit');
+    Route::delete('/{courses}', 'destroy')->middleware('permission:course-delete');
+});
+
+//  events routes
+// Route::apiResource('events', EventController::class);
+// Route::apiResource('events.attendees', AttendeeController::class)->scoped()->except(['update']);
+Route::get('/events', [EventController::class, 'index']);
+Route::get('/events/{event}', [EventController::class, 'show']);
+Route::middleware('auth:admin')->controller(EventController::class)->prefix('events')->group(function () {
+    Route::post('/', 'store')->middleware('permission:event-create');
+    Route::put('/{events}', 'update')->middleware('permission:event-edit');
+    Route::delete('/{events}', 'destroy')->middleware('permission:event-delete');
+});

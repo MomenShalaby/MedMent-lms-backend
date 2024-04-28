@@ -58,15 +58,15 @@ trait FileUploader
     {
         $requestFile = $request->file($inputName);
         try {
-            $dir = 'public/images/' . $name;
-            $fixName = $data->id . '-' . $name . '.' . $requestFile->extension();
+            $dir = 'public/images/' . $name . '/image/';
+            $fixName = $data->id . '-' . $name . '-' . uniqid() . '.' . $requestFile->extension();
 
             if ($requestFile) {
                 Storage::putFileAs($dir, $requestFile, $fixName);
-                $request->image = $fixName;
+                $request->image = '/storage/images/' . $name . '/' . $fixName;
 
                 $data->update([
-                    $inputName => $request->image,
+                    $inputName => ["url" => $request->image],
                 ]);
             }
 
@@ -74,6 +74,40 @@ trait FileUploader
         } catch (\Throwable $th) {
             report($th);
 
+            return $th->getMessage();
+        }
+    }
+
+    public function uploadMultipleImages($request, $data, $name, $inputName = 'images')
+    {
+        try {
+            $dir = 'public/images/' . $name . '/images/';
+            $uploadedFiles = [];
+            $counter = 1;
+            if ($request->hasFile($inputName)) {
+                foreach ($request->file($inputName) as $file) {
+                    $fixName = $data->id . '-' . $name . '-' . uniqid() . '-' . $counter . '.' . $file->extension();
+                    Storage::putFileAs($dir, $file, $fixName);
+                    $uploadedFiles[] = '/storage/images/' . $name . '/' . $fixName;
+                    $counter++;
+
+                    // foreach ($request->file('images') as $imagefile) {
+                    //     $image = new CourseImages;
+                    //     $path = $imagefile->store('/images/resource', ['disk' => 'my_files']);
+                    //     $image->url = $path;
+                    //     $image->course_id = $course->id;
+                    //     $image->save();
+                    // }
+                }
+
+                $data->update([
+                    $inputName => $uploadedFiles,
+                ]);
+            }
+
+            return true;
+        } catch (\Throwable $th) {
+            report($th);
             return $th->getMessage();
         }
     }

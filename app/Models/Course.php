@@ -13,15 +13,15 @@ class Course extends Model
     use HasFactory;
     // use HasUuids;
 
-    protected $fillable = ['course_name', 'user_id', 'description','image'];
+    protected $fillable = ['course_name', 'user_id', 'description', 'image'];
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
 
-    // public function attendees(): HasMany
-    // {
-    //     return $this->hasMany(Attendee::class);
-    // }
+    public function images(): HasMany
+    {
+        return $this->hasMany(CourseImages::class);
+    }
 }
