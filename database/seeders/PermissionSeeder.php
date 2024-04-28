@@ -34,6 +34,12 @@ class PermissionSeeder extends Seeder
             'hospital-delete',
             'subscription-viewall',
             'subscription-edit',
+            'university-create',
+            'university-edit',
+            'university-delete',
+            'degree-create',
+            'degree-edit',
+            'degree-delete',
 
         ];
         foreach ($permissions as $permission) {

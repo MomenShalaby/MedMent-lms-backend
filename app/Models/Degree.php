@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Degree extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+    ];
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 }
