@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\AttendeeController;
 use App\Http\Controllers\Api\Auth\AdminAuthController;
 use App\Http\Controllers\Api\DegreeController;
 use App\Http\Controllers\Api\CourseController;
@@ -80,3 +81,11 @@ Route::middleware('auth:admin')->controller(EventController::class)->prefix('eve
     Route::put('/{events}', 'update')->middleware('permission:event-edit');
     Route::delete('/{events}', 'destroy')->middleware('permission:event-delete');
 });
+
+
+Route::apiResource('events.attendees', AttendeeController::class)->scoped()->except(['update']);
+// Route::middleware('auth:api')->controller(AttendeeController::class)->prefix('/events/{event}/attendees')->group(function () {
+//     Route::get('/', 'index');
+//     Route::post('/{attendee}', 'store');
+//     Route::delete('/{attendee}', 'destroy')->middleware('can:delete,experience');
+// });
