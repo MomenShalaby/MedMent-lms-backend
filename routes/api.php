@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\auth\ForgotPasswordController;
+use App\Http\Controllers\Api\auth\ResetPasswordController;
 use App\Http\Controllers\Api\Auth\UserAuthController;
 use App\Http\Controllers\Api\AttendeeController;
 use App\Http\Controllers\Api\CountryController;
@@ -23,8 +25,10 @@ Route::controller(UserAuthController::class)->group(function () {
     Route::get('me', 'me')->middleware('auth:api');
 });
 
-// Route::apiResource('courses', CourseController::class);
-// Route::apiResource('events', EventController::class);
+Route::post('password/forgot', [ForgotPasswordController::class, 'forgotPassword']);
+Route::post('password/reset', [ResetPasswordController::class, 'resetPassword']);
+
+
 
 Route::apiResource('events.attendees', AttendeeController::class)->scoped()->except(['update']);
 // Route::middleware('auth:api')->controller(AttendeeController::class)->prefix('/events/{event}/attendees')->group(function () {
