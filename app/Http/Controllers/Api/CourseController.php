@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CourseResource;
 use App\Models\Course;
+use App\Models\CourseImages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\HttpResponses;
@@ -44,17 +45,39 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-
+        $validatedData = $request->validate([
+            'course_name' => 'required|max:255',
+            'description' => 'nullable',
+            'image' => 'required|image:jpeg,png,jpg,gif,svg'
+        ]);
 
         $course = Course::create([
-            ...$request->validate([
-                'course_name' => 'required|max:255',
-                'description' => 'nullable',
-                'image' => 'required|image:jpeg,png,jpg,gif,svg|max:2048'
-            ]),
-            'user_id' => 1
+            'course_name' => $validatedData['course_name'],
+            'description' => $validatedData['description'],
+            'user_id' => 1 // Assuming user ID is fixed for now
         ]);
-        $this->uploadImage($request, $course, "course");
+
+        $this->uploadImage($request, $course, "course-image");
+
+        // $image = new CourseImages;
+        // $this->uploadMultipleImages($request, $course, "course");
+        // $image->$request['images'];
+        // return $image;
+        // $image->save();
+        if ($request->file('images')) {
+
+            // foreach ($request->file('images') as $imagefile) {
+            //     $image = new CourseImages;
+            //     $path = $imagefile->store('/images/resource', ['disk' => 'public']);
+            //     // $this->uploadImage($request, $course, "course-images", 'images');
+            //     $image->course_id = $course->id;
+            //     $image->url = $path;
+            //     $image->course_id = $course->id;
+            //     $image->save();
+            // }
+        }
+        $course->load('images');
+
         $course = new CourseResource($course);
         return $this->success($course, "data inserted", 201);
     }

@@ -32,10 +32,10 @@ return Application::configure(basePath: dirname(__DIR__))
     
         //     throw new NotFoundHttpException("Unable to locate the you requested.");
         // }
+    
 
 
-        
-//         $exceptions->report(function (ModelNotFoundException $e) {
+        //         $exceptions->report(function (ModelNotFoundException $e) {
 //             throw new NotFoundHttpException("Unable to locate the you requested.");
 //         });
 //         $exceptions->renderable(function (NotFoundHttpException $e) {
