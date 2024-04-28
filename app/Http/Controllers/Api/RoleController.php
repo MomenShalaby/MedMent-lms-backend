@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\RoleResource;
+use App\Traits\CanLoadRelationships;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -11,20 +11,18 @@ use Spatie\Permission\Models\Role;
 class RoleController extends Controller
 {
     use HttpResponses;
-    /**
-     * Display a listing of the resource.
-     */
+    use CanLoadRelationships;
+    private $relations = ['permissions'];
+
     public function index()
     {
-        $roles = Role::whereNotIn('name', ['super_admin'])->latest()->get();
-        return $this->success(
-            $roles,
-        );
+        $query = $this->loadRelationships(Role::query());
+        $roles = $query->whereNotIn('name', ['super_admin'])->latest()->get();
+        return $this->success([
+            'roles' => $roles,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -36,30 +34,20 @@ class RoleController extends Controller
         $role->givePermissionTo($validated['permissions']);
         return $this->success(
             [
-                "role" => $role,
-                "permissions" => $role->permissions,
+                "role" => $role->load('permissions'),
             ],
             'Role created successfully',
             201
         );
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Role $role)
     {
-        return $this->success(
-            [
-                "role" => $role,
-                "permissions" => $role->permissions, //TODO: need to edit the form of data returned
-            ]
-        );
+        return $this->success([
+            "role" => $this->loadRelationships($role),
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Role $role)
     {
         $validated = $request->validate([
@@ -73,14 +61,13 @@ class RoleController extends Controller
             $role->update($validated);
         }
         return $this->success(
-            $role,
+            [
+                "role" => $role->load('permissions'),
+            ],
             'Role updated successfully',
         );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Role $role)
     {
         $role->delete();

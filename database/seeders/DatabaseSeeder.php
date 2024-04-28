@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             StateSeeder::class,
             HospitalSeeder::class,
+            UniversitySeeder::class,
+            DegreeSeeder::class,
             UserSeeder::class,
             CourseSeeder::class,
             EventSeeder::class,
