@@ -23,11 +23,15 @@ Route::controller(UserAuthController::class)->group(function () {
     Route::get('me', 'me')->middleware('auth:api');
 });
 
-Route::apiResource('courses', CourseController::class);
-Route::apiResource('events', EventController::class);
-// Route::apiResource('events.attendees', AttendeeController::class)->scoped(['attendee' => 'event']);
-Route::apiResource('events.attendees', AttendeeController::class)->scoped()->except(['update']);
+// Route::apiResource('courses', CourseController::class);
+// Route::apiResource('events', EventController::class);
 
+Route::apiResource('events.attendees', AttendeeController::class)->scoped()->except(['update']);
+// Route::middleware('auth:api')->controller(AttendeeController::class)->prefix('/events/{event}/attendees')->group(function () {
+//     Route::get('/', 'index');
+//     Route::post('/{attendee}', 'store');
+//     Route::delete('/{attendee}', 'destroy')->middleware('can:delete,experience');
+// });
 
 Route::middleware('auth:api')->controller(ProfileController::class)->prefix('/profile/edit')->group(function () {
     Route::patch('info', 'updateInformation');
