@@ -18,13 +18,6 @@ class SubscriptionController extends Controller
         ]);
     }
 
-    public function show(Subscription $subscription)
-    {
-        return $this->success(
-            $subscription,
-        );
-    }
-
     public function update(Request $request, Subscription $subscription)
     {
         $request->validate([

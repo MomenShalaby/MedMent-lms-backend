@@ -22,12 +22,12 @@ class AdminSeeder extends Seeder
             'password' => Hash::make('password'),
         ])->assignRole('super_admin');
 
-        Admin::create([
-            'fname' => 'admin',
-            'lname' => 'admin',
-            'email' => 'admin@example.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('password'),
-        ])->assignRole('admin');
+        // Admin::create([
+        //     'fname' => 'admin',
+        //     'lname' => 'admin',
+        //     'email' => 'admin@example.com',
+        //     'email_verified_at' => now(),
+        //     'password' => Hash::make('password'),
+        // ])->assignRole('admin');
     }
 }

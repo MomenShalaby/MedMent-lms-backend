@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Hospital;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HospitalController extends Controller
 {
@@ -15,6 +16,7 @@ class HospitalController extends Controller
      */
     public function index()
     {
+        // return Auth::user()->getAllPermissions();
         $hospitals = Hospital::all();
         return $this->success([
             'hospitals' => $hospitals,

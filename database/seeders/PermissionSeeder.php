@@ -27,7 +27,14 @@ class PermissionSeeder extends Seeder
             'news-viewall',
             'news-edit',
             'news-delete',
-            'user-viewall'
+            'user-viewall',
+            'hospital-viewall',
+            'hospital-create',
+            'hospital-edit',
+            'hospital-delete',
+            'subscription-viewall',
+            'subscription-edit',
+
         ];
         foreach ($permissions as $permission) {
             Permission::create(['guard_name' => 'admin', 'name' => $permission]);
