@@ -18,7 +18,6 @@ class ForgotPasswordController extends Controller
         $input = $request->only('email');
         $user = User::where('email', $input)->first();
         $user->notify(new ResetPasswordNotification());
-        $success['succees'] = true;
-        return $this->success([], 'an otp is sent to your email address');
+        return $this->success([], 'OTP is sent to your email address');
     }
 }

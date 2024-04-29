@@ -14,6 +14,14 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
+            'category-create',
+            'category-viewall',
+            'category-edit',
+            'category-delete',
+            'subcategory-create',
+            'subcategory-viewall',
+            'subcategory-edit',
+            'subcategory-delete',
             'course-create',
             'course-viewall',
             'course-edit',

@@ -22,7 +22,7 @@ class ResetPasswordNotification extends Notification
     public function __construct()
     {
         $this->message = 'use the below code for reset password';
-        $this->subject = 'password resetting';
+        $this->subject = 'Reset Password';
         $this->fromEmail = 'test@gmail.com';
         $this->mailer = 'smtp';
         $this->otp = new Otp();
@@ -48,7 +48,7 @@ class ResetPasswordNotification extends Notification
             ->mailer('smtp')
             ->subject($this->subject)
             ->line($this->message)
-            ->line("code :" . $otp->token);
+            ->line("code : " . $otp->token);
     }
 
     /**

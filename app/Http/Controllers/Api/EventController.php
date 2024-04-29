@@ -29,7 +29,7 @@ class EventController extends Controller
         // );
 
         // $query = $this->loadRelationships(Event::query());
-        $query = Event::when(true, fn($q) => $q->with('user', 'attendees', 'attendees.user'));
+        $query = Event::when(true, fn($q) => $q->with('attendees'));
         $events = EventResource::collection($query->paginate());
         return $this->success($events, "data is here", 200, true);
     }

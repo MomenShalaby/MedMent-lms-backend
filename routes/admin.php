@@ -3,9 +3,12 @@
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AttendeeController;
 use App\Http\Controllers\Api\Auth\AdminAuthController;
+use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DegreeController;
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\SubCategoryController;
+
 use App\Http\Controllers\Api\HospitalController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RoleController;
@@ -60,7 +63,20 @@ Route::middleware('auth:admin')->controller(DegreeController::class)->prefix('de
     Route::delete('/{degree}', 'destroy')->middleware('permission:degree-delete');
 });
 
+// category routes
+Route::middleware('auth:admin')->controller(CategoryController::class)->prefix('category')->group(function () {
+    Route::post('/', 'store')->middleware('permission:category-create');
+    Route::put('/{category}', 'update')->middleware('permission:category-edit');
+    Route::delete('/{category}', 'destroy')->middleware('permission:category-delete');
+});
 
+
+// subcategory routes
+Route::middleware('auth:admin')->controller(SubCategoryController::class)->prefix('subcategory')->group(function () {
+    Route::post('/', 'store')->middleware('permission:subcategory-create');
+    Route::put('/{subcategory}', 'update')->middleware('permission:subcategory-edit');
+    Route::delete('/{subcategory}', 'destroy')->middleware('permission:subcategory-delete');
+});
 
 // Courses routes
 Route::get('/courses', [CourseController::class, 'index']);

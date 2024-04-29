@@ -4,9 +4,11 @@ use App\Http\Controllers\Api\auth\ForgotPasswordController;
 use App\Http\Controllers\Api\auth\ResetPasswordController;
 use App\Http\Controllers\Api\Auth\UserAuthController;
 use App\Http\Controllers\Api\AttendeeController;
+use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\CountryStateController;
 use App\Http\Controllers\Api\CourseController;
+use App\Http\Controllers\Api\SubCategoryController;
 use App\Http\Controllers\Api\DegreeController;
 use App\Http\Controllers\Api\EducationController;
 use App\Http\Controllers\Api\EventController;
@@ -33,7 +35,7 @@ Route::post('password/reset', [ResetPasswordController::class, 'resetPassword'])
 
 
 
-Route::apiResource('events.attendees', AttendeeController::class)->scoped()->except(['update']);
+// Route::apiResource('events.attendees', AttendeeController::class)->scoped()->except(['update']);
 Route::middleware('auth:api')->controller(AttendeeController::class)->prefix('/events/{event}/attendees')->group(function () {
     Route::get('/', 'index');
     Route::post('/{attendee}', 'store');
@@ -74,3 +76,9 @@ Route::middleware('auth:api')->controller(EducationController::class)->group(fun
     Route::delete('/education/{education}', 'destroy')->middleware('can:delete,education');
 });
 
+
+Route::get('/category', [CategoryController::class, 'index']);
+Route::get('/category/{category}', [CategoryController::class, 'show']);
+
+Route::get('/subcategory', [SubCategoryController::class, 'index']);
+Route::get('/subcategory/{subcategory}', [SubCategoryController::class, 'show']);
