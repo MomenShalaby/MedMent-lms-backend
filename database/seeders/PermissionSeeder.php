@@ -29,6 +29,7 @@ class PermissionSeeder extends Seeder
             'event-create',
             'event-viewall',
             'event-edit',
+            "event-image-edit",
             'event-delete',
             'attendee-viewall',
             'news-create',

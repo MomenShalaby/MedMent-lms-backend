@@ -63,10 +63,10 @@ trait FileUploader
 
             if ($requestFile) {
                 Storage::putFileAs($dir, $requestFile, $fixName);
-                $request->image = '/storage/images/' . $name . '/' . $fixName;
+                $request->image = '/storage/images/' . $name . '/image/' . $fixName;
 
                 $data->update([
-                    $inputName => ["url" => $request->image],
+                    $inputName => $request->image,
                 ]);
             }
 
@@ -90,14 +90,6 @@ trait FileUploader
                     Storage::putFileAs($dir, $file, $fixName);
                     $uploadedFiles[] = '/storage/images/' . $name . '/' . $fixName;
                     $counter++;
-
-                    // foreach ($request->file('images') as $imagefile) {
-                    //     $image = new CourseImages;
-                    //     $path = $imagefile->store('/images/resource', ['disk' => 'my_files']);
-                    //     $image->url = $path;
-                    //     $image->course_id = $course->id;
-                    //     $image->save();
-                    // }
                 }
 
                 $data->update([
@@ -112,26 +104,6 @@ trait FileUploader
         }
     }
 
-    // public function uploadPhoto($request, $data, $name)
-    // {
-    //     try {
-    //         $dir = 'public/photos/' . $name;
-    //         $fixName = $data->id . '-' . $name . '.' . $request->file('photo')->extension();
-
-    //         if ($request->file('photo')) {
-    //             Storage::putFileAs($dir, $request->file('photo'), $fixName);
-    //             $request->photo = $fixName;
-
-    //             $data->update([
-    //                 'photo' => $request->photo,
-    //             ]);
-    //         }
-    //     } catch (\Throwable $th) {
-    //         report($th);
-
-    //         return $th->getMessage();
-    //     }
-    // }
 
     /**
      * Delete an image file.
@@ -140,17 +112,21 @@ trait FileUploader
      * @param string $directory
      * @return bool|string
      */
-    public function deleteImage($fileName, $directory = 'public/images')
+    public function deleteImage($imageUrl)
     {
         try {
-            if ($fileName) {
-                Storage::delete($directory . '/' . $fileName);
+            $filePath = str_replace('/storage', 'public', $imageUrl);
+            if (Storage::exists($filePath)) {
+                Storage::delete($filePath);
                 return true;
             }
+
             return false;
         } catch (\Throwable $th) {
             report($th);
+
             return $th->getMessage();
         }
     }
+
 }

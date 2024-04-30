@@ -25,4 +25,11 @@ class ForgotPasswordRequest extends FormRequest
             'email' => ['required', 'email', 'exists:users']
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'email.exists' => "Email Doesn't Exist.",
+        ];
+    }
 }

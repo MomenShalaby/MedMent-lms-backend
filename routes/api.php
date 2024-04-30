@@ -38,7 +38,8 @@ Route::post('password/reset', [ResetPasswordController::class, 'resetPassword'])
 // Route::apiResource('events.attendees', AttendeeController::class)->scoped()->except(['update']);
 Route::middleware('auth:api')->controller(AttendeeController::class)->prefix('/events/{event}/attendees')->group(function () {
     Route::get('/', 'index');
-    Route::post('/{attendee}', 'store');
+    Route::post('/', 'store');
+    Route::post('/{attendee}', 'show');
     Route::delete('/{attendee}', 'destroy')->middleware('can:delete,experience');
 });
 

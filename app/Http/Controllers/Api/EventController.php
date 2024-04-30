@@ -7,6 +7,7 @@ use App\Http\Requests\EventRequest;
 use App\Http\Resources\EventResource;
 use App\Models\Event;
 use App\Traits\CanLoadRelationships;
+use App\Traits\FileUploader;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class EventController extends Controller
 {
     use HttpResponses;
-
+    use FileUploader;
     use CanLoadRelationships;
     private array $relations = ['attendees', 'attendees.user'];
 
@@ -36,8 +37,9 @@ class EventController extends Controller
         $event = Event::create(
             $request->all()
         );
+        $this->uploadImage($request, $event, 'event');
         $query = $this->loadRelationships($event);
-        return $this->success(new EventResource($event), "data inserted", 201);
+        return $this->success(new EventResource($query), "data inserted", 201);
 
     }
 
@@ -66,12 +68,25 @@ class EventController extends Controller
     }
 
     /**
+     * Update the specified resource image in storage.
+     */
+    public function updateEventImage(EventRequest $request, Event $events)
+    {
+
+        $this->deleteImage($events->image);
+        $this->uploadImage($request, $events, 'event');
+
+        return $this->success($events, "image updated", 202);
+
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Event $events)
     {
+        $this->deleteImage($events->image);
         $events->delete();
-        // return $this->success($event, "", 204);
         return response(status: 204);
     }
 }
