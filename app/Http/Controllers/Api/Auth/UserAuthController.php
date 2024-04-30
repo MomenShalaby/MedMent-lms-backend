@@ -35,6 +35,7 @@ class UserAuthController extends Controller
         // $user->assignRole('user');
 
         $token = Auth::login($user);
+        // $cookie = cookie('jwt', $token, 60 * 24);
         return $this->success([
             'user' => new UserResource($user),
             'token' => $token,
@@ -47,6 +48,7 @@ class UserAuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         $token = Auth::attempt($credentials);
+        // $cookie = cookie('jwt', $token, 60 * 24);
         if (!$token) {
             return $this->error('Email or password is wrong', 401);
         }
@@ -55,6 +57,7 @@ class UserAuthController extends Controller
             'user' => new UserResource($user),
             'token' => $token,
         ]);
+        // ->withCookie($cookie);
     }
 
     public function logout(): JsonResponse

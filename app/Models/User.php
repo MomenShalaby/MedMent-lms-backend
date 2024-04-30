@@ -64,17 +64,11 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     protected function avatar(): Attribute
     {
+        $user = Auth::user();
+        $avatar = $user->gender === 'female' ? 'fdoctor.png' : 'doctor.png';
         return Attribute::make(
-            get: fn($value) => $value === 'doctor.png' || $value === 'fdoctor.png' ? $value : "/storage/avatars/$value",
+            get: fn($value) => $value ? "/storage/avatars/$value" : $avatar,
         );
-        // $user = Auth::user();
-        // $avatar = $user->gender = 'female' ? 'fdoctor.png' : 'doctor.png';
-        // return Attribute::make(
-        //     get: fn($value) => $value ? "/storage/avatars/$value" : $avatar,
-        // );
-        // return Attribute::make(
-        //     get: fn($value) => Str::endsWith($value, '.svg') ? "/avatars/$value" : "/storage/uploadedAvatars/$value",
-        // );
     }
 
     public function subscription(): BelongsTo
