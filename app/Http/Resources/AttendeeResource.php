@@ -18,6 +18,7 @@ class AttendeeResource extends JsonResource
             'id' => $this->id,
             'created_at' => $this->created_at,
             'user_id' => $this->user_id,
+            'event_id' => $this->event_id,
             'user' => new UserResource($this->whenLoaded('user')),
         ];
     }

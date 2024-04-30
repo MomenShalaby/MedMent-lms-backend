@@ -100,9 +100,10 @@ Route::middleware('auth:admin')->controller(EventController::class)->prefix('eve
 });
 
 
-Route::apiResource('events.attendees', AttendeeController::class)->scoped()->except(['update']);
-// Route::middleware('auth:api')->controller(AttendeeController::class)->prefix('/events/{event}/attendees')->group(function () {
-//     Route::get('/', 'index');
-//     Route::post('/{attendee}', 'store');
-//     Route::delete('/{attendee}', 'destroy')->middleware('can:delete,experience');
-// });
+Route::middleware('auth:admin')->controller(AttendeeController::class)->prefix('/events/{event}/attendees')->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{attendee}', 'show');
+    // Route::post('/', 'store');
+    // Route::delete('/{attendee}', 'destroy');
+    // Route::post('/{attendee}', 'show');
+});
