@@ -27,7 +27,7 @@ Route::controller(AdminAuthController::class)->prefix("admin")->group(function (
 
 //super admin only routes
 Route::middleware(['auth:admin', 'role:super_admin'])->group(function () {
-    Route::apiResource('roles', RoleController::class);
+    // Route::apiResource('roles', RoleController::class);
     Route::get('permissions', [PermissionController::class, 'index']);
     Route::apiResource('admins', AdminController::class);
 });

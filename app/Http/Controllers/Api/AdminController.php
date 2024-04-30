@@ -12,7 +12,7 @@ class AdminController extends Controller
 {
     use HttpResponses;
     use CanLoadRelationships;
-    private $relations = ['roles'];
+    private $relations = ['permissions'];
 
     public function index()
     {
@@ -31,13 +31,17 @@ class AdminController extends Controller
             'lname' => ['required', 'string'],
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
-            'role' => ['sometimes', 'string', 'exists:roles,name'],
+            // 'role' => ['sometimes', 'string', 'exists:roles,name'],
+            'permissions' => ['required', 'array'],
+            'permissions.*' => ['string', 'exists:permissions,name']
+            // 'string|in:code,netflix,games,sports,reading'
         ]);
         $admin = Admin::create($request->except('role'));
-        $admin->assignRole($request->role);
+        // $admin->assignRole($request->role);
+        $admin->syncPermissions($request->permissions);
 
         return $this->success([
-            "admin" => $admin->load('roles'),
+            "admin" => $admin->load('permissions'),
         ], 'Admin created successfully', 201);
     }
 
@@ -51,20 +55,24 @@ class AdminController extends Controller
     public function update(Request $request, Admin $admin)
     {
         $request->validate([
-            'fname' => ['required_without_all:lname,email,password,role', 'string'],
-            'lname' => ['required_without_all:fname,email,password,role', 'string'],
-            'email' => ['required_without_all:fname,lname,password,role', 'string', 'email'],
-            'password' => ['required_without_all:fname,lname,email,role', 'string'],
-            'role' => ['required_without_all:fname,lname,email,password', 'string', 'exists:roles,name'],
+            'fname' => ['required_without_all:lname,email,password,permissions', 'string'],
+            'lname' => ['required_without_all:fname,email,password,permissions', 'string'],
+            'email' => ['required_without_all:fname,lname,password,permissions', 'string', 'email'],
+            'password' => ['required_without_all:fname,lname,email,permissions', 'string'],
+            // 'role' => ['required_without_all:fname,lname,email,password', 'string', 'exists:roles,name'],
+            'permissions' => ['required_without_all:fname,lname,email,password', 'array'],
+            'permissions.*' => ['string', 'exists:permissions,name']
         ]);
         if ($request->fname || $request->lname || $request->email || $request->password) {
             $admin->update($request->except('role'));
         }
-        if ($request->role) {
-            $admin->syncRoles([$request->role]);
+
+        if ($request->permissions) {
+            // $admin->syncRoles([$request->role]);
+            $admin->syncPermissions($request->permissions);
         }
         return $this->success([
-            "admin" => $admin->load('roles'),
+            "admin" => $admin->load('permissions'),
         ]);
 
     }
@@ -72,7 +80,7 @@ class AdminController extends Controller
     public function destroy(Admin $admin)
     {
         $admin->delete();
-        $admin->syncRoles();
+        $admin->syncPermissions();
         return $this->success(
             '',
             'Admin deleted successfully',

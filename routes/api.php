@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\auth\ForgotPasswordController;
 use App\Http\Controllers\Api\auth\ResetPasswordController;
 use App\Http\Controllers\Api\Auth\UserAuthController;
 use App\Http\Controllers\Api\AttendeeController;
+use App\Http\Controllers\Api\Auth\VerifyEmailController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\CountryStateController;
@@ -82,3 +83,16 @@ Route::get('/category/{category}', [CategoryController::class, 'show']);
 
 Route::get('/subcategory', [SubCategoryController::class, 'index']);
 Route::get('/subcategory/{subcategory}', [SubCategoryController::class, 'show']);
+
+
+//verify email
+Route::post('/email/verification-notification', [VerifyEmailController::class, 'send'])
+    ->middleware(['auth:api'])
+    ->name('verification.send');
+
+Route::get('/verify-email/{id}/{hash}', [VerifyEmailController::class, 'verify'])
+    ->middleware(['auth:api', 'signed'])
+    ->name('verification.verify');
+
+// 'throttle:6,1'
+
