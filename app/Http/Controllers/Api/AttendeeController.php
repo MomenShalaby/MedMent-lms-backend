@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AttendeeResource;
 use App\Models\Attendee;
 use App\Models\Event;
+use App\Models\User;
 use App\Traits\CanLoadRelationships;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
@@ -33,15 +34,9 @@ class AttendeeController extends Controller
      */
     public function store(Request $request, Event $event)
     {
-        // $validated = $request->validate([
-        //     'user_id' => 'required|exists:users',
-        // ]);
-        // $validated['user_id'] = Auth::id();
-
-
-        // if ($event->attendees()->where('user_id', Auth::id())->exists()) {
-        //     return $this->error('User is already assigned to this event', 400);
-        // }
+        if ($event->attendees()->where('user_id', Auth::id())->exists()) {
+            return $this->error('User is already assigned to this event', 400);
+        }
         // return Auth::id();
         $attendee = $event->attendees()->create([
             'user_id' => Auth::id(),
@@ -64,9 +59,22 @@ class AttendeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Event $event, Attendee $attendee)
+    public function destroy(Event $event, User $attendee)
     {
+        $attendee = Attendee::where('event_id', $event->id)
+            ->where('user_id', Auth::id())
+            ->first();
+        // return $attendee;
         $attendee->delete();
         return response(status: 204);
+    }
+
+    public function showUserEvents()
+    {
+        $user_id = Auth::id();
+        $events = Attendee::where('user_id', $user_id)->get();
+        // $this->loadRelationships($events);
+        $events = AttendeeResource::collection($events);
+        return $this->success($events, "data is here", 200);
     }
 }

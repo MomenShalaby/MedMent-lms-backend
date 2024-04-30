@@ -11,6 +11,7 @@ use App\Traits\FileUploader;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {

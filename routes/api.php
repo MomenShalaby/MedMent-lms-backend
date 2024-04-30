@@ -34,14 +34,17 @@ Route::controller(UserAuthController::class)->group(function () {
 Route::post('password/forgot', [ForgotPasswordController::class, 'forgotPassword']);
 Route::post('password/reset', [ResetPasswordController::class, 'resetPassword']);
 
+Route::middleware('auth:api')->controller(AttendeeController::class)->prefix('events')->group(function () {
+    Route::get('/me', 'showUserEvents');
+});
 
-
-// Route::apiResource('events.attendees', AttendeeController::class)->scoped()->except(['update']);
 Route::middleware('auth:api')->controller(AttendeeController::class)->prefix('/events/{event}/attendees')->group(function () {
-    Route::get('/', 'index');
+    // Route::get('/', 'index');
+    // Route::get('/{attendee}', 'show');
+
     Route::post('/', 'store');
-    Route::post('/{attendee}', 'show');
-    Route::delete('/{attendee}', 'destroy')->middleware('can:delete,experience');
+    Route::delete('/', 'destroy');
+
 });
 
 Route::middleware('auth:api')->controller(ProfileController::class)->prefix('/profile')->group(function () {
