@@ -6,24 +6,26 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AttendeeResource;
 use App\Models\Attendee;
 use App\Models\Event;
+use App\Traits\CanLoadRelationships;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
+use Illuminate\Support\Facades\Auth;
 
 class AttendeeController extends Controller
 {
     use HttpResponses;
+    use CanLoadRelationships;
+    private array $relations = ['user'];
 
     /**
      * Display a listing of the resource.
      */
     public function index(Event $event)
     {
-        // return Attendee::all();
-
         $attendees = $event->attendees();
-        $attendees = AttendeeResource::collection($attendees->paginate());
+        $query = $this->loadRelationships($attendees);
+        $attendees = AttendeeResource::collection($query->paginate());
         return $this->success($attendees, "data is here", 200, true);
-        // return $attendees->where()
     }
 
     /**
@@ -31,8 +33,18 @@ class AttendeeController extends Controller
      */
     public function store(Request $request, Event $event)
     {
+        // $validated = $request->validate([
+        //     'user_id' => 'required|exists:users',
+        // ]);
+        // $validated['user_id'] = Auth::id();
+
+
+        // if ($event->attendees()->where('user_id', Auth::id())->exists()) {
+        //     return $this->error('User is already assigned to this event', 400);
+        // }
+        // return Auth::id();
         $attendee = $event->attendees()->create([
-            'user_id' => 1,
+            'user_id' => Auth::id(),
         ]);
         $attendee = new AttendeeResource($attendee);
         return $this->success($attendee, "data is here", 201);
@@ -43,7 +55,7 @@ class AttendeeController extends Controller
      */
     public function show(Event $event, Attendee $attendee)
     {
-
+        $this->loadRelationships($attendee);
         $attendee = new AttendeeResource($attendee);
         return $this->success($attendee, "data is here", 200);
     }

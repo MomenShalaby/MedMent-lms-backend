@@ -17,10 +17,11 @@ class EventResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'image' => $this->image,
             'description' => $this->description,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
-            'user' => new UserResource($this->whenLoaded('user')),
+            // 'user' => new UserResource($this->whenLoaded('user')),
             'attendees' => AttendeeResource::collection($this->whenLoaded('attendees')),
         ];
     }

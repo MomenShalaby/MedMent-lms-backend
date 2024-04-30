@@ -95,6 +95,7 @@ Route::get('/events/{event}', [EventController::class, 'show']);
 Route::middleware('auth:admin')->controller(EventController::class)->prefix('events')->group(function () {
     Route::post('/', 'store')->middleware('permission:event-create');
     Route::put('/{events}', 'update')->middleware('permission:event-edit');
+    Route::put('/{events}/image', 'updateEventImage')->middleware('permission:event-image-edit');
     Route::delete('/{events}', 'destroy')->middleware('permission:event-delete');
 });
 
