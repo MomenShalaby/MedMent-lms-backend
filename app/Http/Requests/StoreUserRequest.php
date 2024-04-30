@@ -7,7 +7,8 @@ use App\Enums\Enums\SubscriptionType;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules;
+// use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rules\Password;
 
 class StoreUserRequest extends FormRequest
 {
@@ -30,7 +31,7 @@ class StoreUserRequest extends FormRequest
             'fname' => ['required', 'string', 'max:30'],
             'lname' => ['required', 'string', 'max:30'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'confirmed', Password::defaults()],
             'gender' => ['required', Rule::enum(Gender::class)],
             'subscription_id' => ['required', 'exists:subscriptions,id'],
             'country_id' => ['required', 'exists:countries,id'],

@@ -46,8 +46,8 @@ Route::middleware('auth:api')->controller(AttendeeController::class)->prefix('/e
 
 Route::middleware('auth:api')->controller(ProfileController::class)->prefix('/profile/edit')->group(function () {
     Route::patch('info', 'updateInformation');
+    Route::put('password', 'updatePassword');
     Route::post('avatar', 'updateAvatar');
-    Route::get('avatar', 'selectAvatar');
     Route::delete('edit', 'destroy');
 });
 
@@ -96,4 +96,5 @@ Route::get('/verify-email/{id}/{hash}', [VerifyEmailController::class, 'verify']
     ->name('verification.verify');
 
 // 'throttle:6,1'
+
 
