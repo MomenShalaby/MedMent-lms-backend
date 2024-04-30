@@ -81,4 +81,19 @@ class ProfileController extends Controller
             return $this->success('', 'Profile Picture updated successfully');
         }
     }
+
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'current_password'],
+        ]);
+
+        $user = $request->user();
+
+        Auth::logout();
+
+        $user->delete();
+
+        return $this->success('', 'Account deleted successfully');
+    }
 }

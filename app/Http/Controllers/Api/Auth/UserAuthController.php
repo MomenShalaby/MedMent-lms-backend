@@ -48,7 +48,7 @@ class UserAuthController extends Controller
 
         $token = Auth::attempt($credentials);
         if (!$token) {
-            return $this->error('Credentials do not match', 401);
+            return $this->error('Email or password is wrong', 401);
         }
         $user = Auth::user();
         return $this->success([

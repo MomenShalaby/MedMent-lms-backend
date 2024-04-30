@@ -44,11 +44,11 @@ Route::middleware('auth:api')->controller(AttendeeController::class)->prefix('/e
     Route::delete('/{attendee}', 'destroy')->middleware('can:delete,experience');
 });
 
-Route::middleware('auth:api')->controller(ProfileController::class)->prefix('/profile/edit')->group(function () {
-    Route::patch('info', 'updateInformation');
-    Route::put('password', 'updatePassword');
-    Route::post('avatar', 'updateAvatar');
-    Route::delete('edit', 'destroy');
+Route::middleware('auth:api')->controller(ProfileController::class)->prefix('/profile')->group(function () {
+    Route::patch('/editinfo', 'updateInformation');
+    Route::put('/editpassword', 'updatePassword');
+    Route::post('/editavatar', 'updateAvatar');
+    Route::delete('/', 'destroy');
 });
 
 Route::middleware('auth:api')->controller(ExperienceController::class)->group(function () {
