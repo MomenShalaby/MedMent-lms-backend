@@ -26,9 +26,9 @@ class AdminAuthController extends Controller
         if (!$token) {
             return $this->error('Credentials do not match', 401);
         }
-        $user = Auth::guard('admin')->user();
+        $user = Auth::guard('admin')->user()->load('roles')->load('permissions');
         return $this->success([
-            'user' => new UserResource($user),
+            'user' => $user,
             'token' => $token,
         ]);
     }
@@ -42,7 +42,7 @@ class AdminAuthController extends Controller
     public function me(): JsonResponse
     {
         return $this->success([
-            'user' => new UserResource(Auth::guard('admin')->user()),
+            'user' => Auth::guard('admin')->user(),
         ]);
     }
 

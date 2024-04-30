@@ -3,16 +3,52 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
+// use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
-    public function updateInformation()
+    use HttpResponses;
+    public function updateInformation(Request $request)
     {
+        $validated = $request->validate([
+            'fname' => ['required_without_all:lname,email', 'string', 'max:30'],
+            'lname' => ['required_without_all:fname,email', 'string', 'max:30'],
+            'email' => ['required_without_all:fname,lname', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($request->user()->id)],
+        ]);
+        $request->user()->fill($validated);
+
+        if ($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
+        }
+
+        $request->user()->save();
+
+        return $this->success('', 'Profile updated successfully');
+
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $validated = $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', Password::defaults(), 'confirmed'],
+        ]);
+
+        $request->user()->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return $this->success('', 'Password updated successfully');
     }
 
     public function updateAvatar(Request $request)
@@ -42,27 +78,22 @@ class ProfileController extends Controller
             $oldAvatar = str_replace('/storage', 'public', $oldAvatar);
             Storage::delete($oldAvatar);
 
-            return response()->json([
-                $image
-            ]);
+            return $this->success('', 'Profile Picture updated successfully');
         }
+    }
 
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'current_password'],
+        ]);
 
-        //image name
-        // $imgext = $request->avatar->extension();
-        // $img = Image::make($request->avatar)->fit(160)->encode($imgext);
-        // return $img;
-        // $imgName = time() . '.' . $imgext;
-        // Storage::put("public/uploadedAvatars/$imgName", $img);
-        // //store img name in db
-        // $user = Auth::user();
-        // $oldAvatar = $user->avatar;
-        // $user->avatar = $imgName;
-        // $user->save();
-        // //delete the old avatar
-        // $oldAvatar = str_replace('/storage', 'public', $oldAvatar);
-        // Storage::delete($oldAvatar);
-        // //store img in public folder
-        // return Redirect::route('profile.edit')->with('status', 'avatar updated');
+        $user = $request->user();
+
+        Auth::logout();
+
+        $user->delete();
+
+        return $this->success('', 'Account deleted successfully');
     }
 }

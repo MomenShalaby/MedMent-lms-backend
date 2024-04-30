@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\auth\ForgotPasswordController;
 use App\Http\Controllers\Api\auth\ResetPasswordController;
 use App\Http\Controllers\Api\Auth\UserAuthController;
 use App\Http\Controllers\Api\AttendeeController;
+use App\Http\Controllers\Api\Auth\VerifyEmailController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\CountryStateController;
@@ -46,11 +47,11 @@ Route::middleware('auth:api')->controller(AttendeeController::class)->prefix('/e
 
 });
 
-Route::middleware('auth:api')->controller(ProfileController::class)->prefix('/profile/edit')->group(function () {
-    Route::patch('info', 'updateInformation');
-    Route::post('avatar', 'updateAvatar');
-    Route::get('avatar', 'selectAvatar');
-    Route::delete('edit', 'destroy');
+Route::middleware('auth:api')->controller(ProfileController::class)->prefix('/profile')->group(function () {
+    Route::patch('/editinfo', 'updateInformation');
+    Route::put('/editpassword', 'updatePassword');
+    Route::post('/editavatar', 'updateAvatar');
+    Route::delete('/', 'destroy');
 });
 
 Route::middleware('auth:api')->controller(ExperienceController::class)->group(function () {
@@ -86,3 +87,17 @@ Route::get('/category/{category}', [CategoryController::class, 'show']);
 
 Route::get('/subcategory', [SubCategoryController::class, 'index']);
 Route::get('/subcategory/{subcategory}', [SubCategoryController::class, 'show']);
+
+
+//verify email
+Route::post('/email/verification-notification', [VerifyEmailController::class, 'send'])
+    ->middleware(['auth:api'])
+    ->name('verification.send');
+
+Route::get('/verify-email/{id}/{hash}', [VerifyEmailController::class, 'verify'])
+    ->middleware(['auth:api', 'signed'])
+    ->name('verification.verify');
+
+// 'throttle:6,1'
+
+
