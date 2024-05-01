@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\EventRequest;
 use App\Http\Resources\EventResource;
 use App\Models\Event;
+use App\Traits\NotifiableEvent;
 use App\Traits\HttpResponses;
 use App\Traits\CanLoadRelationships;
 use App\Traits\FileUploader;
+
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +20,7 @@ class EventController extends Controller
     use HttpResponses;
     use FileUploader;
     use CanLoadRelationships;
+    use NotifiableEvent;
     private array $relations = ['attendees', 'attendees.user', 'tags'];
 
     /**
@@ -35,11 +38,15 @@ class EventController extends Controller
      */
     public function store(EventRequest $request)
     {
+
         $event = Event::create(
             $request->all()
         );
         $event->tags()->sync((array) $request->input('tag'));
         $this->uploadImage($request, $event, 'event');
+        $event->notifyUsersWithSharedTags();
+
+
         $query = $this->loadRelationships($event);
         return $this->success(new EventResource($query), "data inserted", 201);
 
