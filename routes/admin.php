@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\HospitalController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\SubscriptionController;
+use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\UniversityController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -88,8 +89,6 @@ Route::middleware('auth:admin')->controller(CourseController::class)->prefix('co
 });
 
 //  events routes
-// Route::apiResource('events', EventController::class);
-// Route::apiResource('events.attendees', AttendeeController::class)->scoped()->except(['update']);
 Route::get('/events', [EventController::class, 'index']);
 Route::get('/events/{event}', [EventController::class, 'show']);
 Route::middleware('auth:admin')->controller(EventController::class)->prefix('events')->group(function () {
@@ -99,11 +98,21 @@ Route::middleware('auth:admin')->controller(EventController::class)->prefix('eve
     Route::delete('/{events}', 'destroy')->middleware('permission:event-delete');
 });
 
-
+//  event attendees routes
 Route::middleware('auth:admin')->controller(AttendeeController::class)->prefix('/events/{event}/attendees')->group(function () {
     Route::get('/', 'index');
     Route::get('/{attendee}', 'show');
     // Route::post('/', 'store');
     // Route::delete('/{attendee}', 'destroy');
     // Route::post('/{attendee}', 'show');
+});
+
+//  tags routes
+
+Route::middleware('auth:admin')->controller(TagController::class)->prefix('/tags')->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{tag}', 'show');
+    Route::post('/', 'store');
+    Route::put('/{tag}', 'update');
+    Route::delete('/{tag}', 'destroy');
 });
