@@ -17,7 +17,7 @@ class Experience extends Model
         'end_date',
         'description',
         'hospital_id',
-        'otherHospital',
+        'other_hospital',
         'country_id',
         'state_id',
     ];

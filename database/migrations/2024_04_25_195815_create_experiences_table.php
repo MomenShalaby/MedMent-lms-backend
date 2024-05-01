@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->date('end_date');
             $table->text('description')->nullable();
             $table->foreignId('hospital_id')->nullable()->constrained();
-            $table->string('otherHospital', 100)->nullable();
+            $table->string('other_hospital', 100)->nullable();
             $table->foreignId('country_id')->constrained();
             $table->foreignId('state_id')->constrained();
             $table->timestamps();

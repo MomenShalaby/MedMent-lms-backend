@@ -14,6 +14,10 @@ class Subscription extends Model
         'price',
     ];
 
+    protected $hidden = [
+        'created_at',
+    ];
+
     protected function casts(): array
     {
         return [
