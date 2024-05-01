@@ -24,6 +24,7 @@ class EventRequest extends FormRequest
             'image' => 'required|image:jpeg,png,jpg,gif,svg',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
+            'tag.*' => 'exists:tags,id',
 
         ];
     }
@@ -36,6 +37,7 @@ class EventRequest extends FormRequest
             'image' => 'nullable|image:jpeg,png,jpg,gif,svg',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after:start_date',
+            'tag.*' => 'exists:tags,id',
 
         ];
     }

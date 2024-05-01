@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\EventRequest;
 use App\Http\Resources\EventResource;
 use App\Models\Event;
+use App\Traits\HttpResponses;
 use App\Traits\CanLoadRelationships;
 use App\Traits\FileUploader;
 use Illuminate\Http\Request;
-use App\Traits\HttpResponses;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +18,7 @@ class EventController extends Controller
     use HttpResponses;
     use FileUploader;
     use CanLoadRelationships;
-    private array $relations = ['attendees', 'attendees.user'];
+    private array $relations = ['attendees', 'attendees.user', 'tags'];
 
     /**
      * Display a listing of the resource.
@@ -38,6 +38,7 @@ class EventController extends Controller
         $event = Event::create(
             $request->all()
         );
+        $event->tags()->sync((array) $request->input('tag'));
         $this->uploadImage($request, $event, 'event');
         $query = $this->loadRelationships($event);
         return $this->success(new EventResource($query), "data inserted", 201);
@@ -63,7 +64,9 @@ class EventController extends Controller
         $events->update(
             $request->all()
         );
+        $events->tags()->sync((array) $request->input('tag'));
         $query = $this->loadRelationships($events);
+        $events = new EventResource($query);
         return $this->success($events, "data updated", 202);
 
     }

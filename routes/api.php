@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\EducationController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ExperienceController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\UniversityController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -81,12 +82,18 @@ Route::middleware('auth:api')->controller(EducationController::class)->group(fun
     Route::delete('/education/{education}', 'destroy')->middleware('can:delete,education');
 });
 
-
+// category routes
 Route::get('/category', [CategoryController::class, 'index']);
 Route::get('/category/{category}', [CategoryController::class, 'show']);
-
+// subactegory routes
 Route::get('/subcategory', [SubCategoryController::class, 'index']);
 Route::get('/subcategory/{subcategory}', [SubCategoryController::class, 'show']);
+
+// tags routes
+Route::middleware('auth:api')->controller(TagController::class)->prefix('/tags')->group(function () {
+    Route::get('/me', 'userIndex');
+    Route::put('/me', 'userUpdate');
+});
 
 
 //verify email
