@@ -20,16 +20,6 @@ class AdminSeeder extends Seeder
             'email' => 'sadmin@example.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
-        ]);
-        // ->assignRole('super_admin');
-
-        Admin::create([
-            'fname' => 'admin',
-            'lname' => 'admin',
-            'email' => 'admin@example.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('password'),
-        ]);
-        // ->assignRole('admin');
+        ])->assignRole('super_admin');
     }
 }
