@@ -36,8 +36,10 @@ class UserAuthController extends Controller
     {
         $request->validated($request->all());
 
-        if (!$this->doesStateBelongToCountry($request->state_id, $request->country_id)) {
-            return $this->error("state doesn't belong to the country entered");
+        if ($request->country_id && $request->state_id) {
+            if (!$this->doesStateBelongToCountry($request->state_id, $request->country_id)) {
+                return $this->error("state doesn't belong to the country entered");
+            }
         }
 
         $user = User::create([
