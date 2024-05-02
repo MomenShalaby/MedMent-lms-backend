@@ -27,6 +27,7 @@ class UserResource extends JsonResource
             'state' => $this->whenLoaded('state'),
             'experiences' => ExperienceResource::collection($this->whenLoaded('experiences')),
             'education' => EducationResource::collection($this->whenLoaded('education')),
+            'tags' => $this->whenLoaded('tags')
             // 'education' => $this->whenLoaded('education'),
         ];
     }

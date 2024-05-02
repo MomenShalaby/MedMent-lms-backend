@@ -19,7 +19,7 @@ class UserAuthController extends Controller
 {
     use HttpResponses;
 
-    private $relations = ['subscription', 'country', 'state', 'experiences', 'experiences.hospital', 'experiences.country', 'experiences.state', 'education', 'education.degree', 'education.university'];
+    private $relations = ['subscription', 'country', 'state', 'experiences', 'experiences.hospital', 'experiences.country', 'experiences.state', 'education', 'education.degree', 'education.university', 'tags'];
 
     private function doesStateBelongToCountry($stateId, $countryId): bool
     {
