@@ -29,7 +29,7 @@ class ExperienceFactory extends Factory
             },
             'description' => fake()->text(),
             'hospital_id' => Hospital::pluck('id')->random(),
-            'otherHospital' => null,
+            'other_hospital' => null,
             'country_id' => Country::pluck('id')->random(),
             'state_id' => State::pluck('id')->random(),
         ];

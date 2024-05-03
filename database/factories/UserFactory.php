@@ -39,7 +39,7 @@ class UserFactory extends Factory
             'subscription_id' => Subscription::pluck('id')->random(),
             'country_id' => Country::pluck('id')->random(),
             'state_id' => State::pluck('id')->random(),
-            'remember_token' => Str::random(10),
+            // 'remember_token' => Str::random(10),
         ];
     }
 

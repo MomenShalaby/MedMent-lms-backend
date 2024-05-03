@@ -33,9 +33,9 @@ class StoreUserRequest extends FormRequest
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Password::defaults()],
             'gender' => ['required', Rule::enum(Gender::class)],
-            'subscription_id' => ['required', 'exists:subscriptions,id'],
-            'country_id' => ['required', 'exists:countries,id'],
-            'state_id' => ['required', 'exists:states,id'],
+            // 'subscription_id' => ['required', 'exists:subscriptions,id'],
+            'country_id' => ['sometimes', 'exists:countries,id'],
+            'state_id' => ['sometimes', 'exists:states,id'],
         ];
     }
 }

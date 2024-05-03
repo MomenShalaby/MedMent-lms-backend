@@ -58,7 +58,6 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'gender' => Gender::class,
-            // 'subscription_type' => SubscriptionType::class,
         ];
     }
 

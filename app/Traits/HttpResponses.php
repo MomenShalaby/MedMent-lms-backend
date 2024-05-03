@@ -11,7 +11,6 @@ trait HttpResponses
         $responseData = [
             'success' => true,
             'message' => $message,
-            'statusCode' => $code,
             'data' => $data,
         ];
 
@@ -34,7 +33,6 @@ trait HttpResponses
         return response()->json([
             'success' => false,
             'message' => $message,
-            'statusCode' => $code,
         ], $code);
     }
 }

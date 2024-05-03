@@ -14,7 +14,6 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // return parent::toArray($request);
         return [
             'id' => $this->id,
             'fname' => $this->fname,
@@ -23,13 +22,13 @@ class UserResource extends JsonResource
             'gender' => $this->gender,
             'avatar' => $this->avatar,
             'bio' => $this->bio,
-            'subscription_id' => $this->subscription_id,
             'subscription' => $this->whenLoaded('subscription'),
-            'country_id' => $this->country_id,
             'country' => $this->whenLoaded('country'),
-            'state_id' => $this->state_id,
             'state' => $this->whenLoaded('state'),
-            'experiences' => $this->whenLoaded('experiences'),
+            'experiences' => ExperienceResource::collection($this->whenLoaded('experiences')),
+            'education' => EducationResource::collection($this->whenLoaded('education')),
+            'tags' => $this->whenLoaded('tags')
+            // 'education' => $this->whenLoaded('education'),
         ];
     }
 }

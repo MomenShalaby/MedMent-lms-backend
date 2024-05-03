@@ -15,7 +15,6 @@ return new class extends Migration {
             $table->string('name', 50);
             $table->string('sortname', 2);
             $table->string('phoneCode', 5);
-            // $table->timestamps();
         });
     }
 
