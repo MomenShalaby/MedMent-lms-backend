@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\AdminProfileController;
 use App\Http\Controllers\Api\AttendeeController;
 use App\Http\Controllers\Api\Auth\AdminAuthController;
 use App\Http\Controllers\Api\CategoryController;
@@ -46,8 +47,7 @@ Route::get('/users', [UserController::class, 'index'])->middleware(['auth:admin'
 
 //subscription routes
 Route::middleware('auth:admin')->controller(SubscriptionController::class)->prefix('subscriptions')->group(function () {
-    Route::get('/', 'index')->middleware('permission:subscription-viewall');
-    Route::patch('/{subscription}', 'update')->middleware('permission:subscription-edit');
+    Route::patch('/{subscription}', 'updatePrice')->middleware('permission:subscription-edit');
 });
 
 //university routes
@@ -108,11 +108,17 @@ Route::middleware('auth:admin')->controller(AttendeeController::class)->prefix('
 });
 
 //  tags routes
-
 Route::middleware('auth:admin')->controller(TagController::class)->prefix('/tags')->group(function () {
     Route::get('/', 'index');
     Route::get('/{tag}', 'show');
     Route::post('/', 'store');
     Route::put('/{tag}', 'update');
     Route::delete('/{tag}', 'destroy');
+});
+
+//profile
+Route::middleware('auth:admin')->controller(AdminProfileController::class)->prefix('admin/profile/edit')->group(function () {
+    Route::patch('/password', 'updatePassword');
+    Route::patch('/avatar', 'updateAvatar');
+    Route::delete('/avatar', 'deleteAvatar');
 });
