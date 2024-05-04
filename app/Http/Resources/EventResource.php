@@ -19,6 +19,7 @@ class EventResource extends JsonResource
             'name' => $this->name,
             'image' => $this->image,
             'description' => $this->description,
+            'short description' => $this->short_description,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             // 'user' => new UserResource($this->whenLoaded('user')),

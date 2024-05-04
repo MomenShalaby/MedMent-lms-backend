@@ -15,7 +15,7 @@ class Event extends Model
     use NotifiableEvent;
 
     use HasFactory;
-    protected $fillable = ['name', 'image', 'description', 'start_date', 'end_date'];
+    protected $fillable = ['name', 'image', 'description', 'short_description', 'start_date', 'end_date'];
 
 
 
