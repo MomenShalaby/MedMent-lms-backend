@@ -2,18 +2,18 @@
 
 namespace Database\Seeders;
 
-use App\Models\Course;
-use App\Models\User;
+use App\Models\CourseLecture;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class CourseSeeder extends Seeder
+class CourseLectureSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Course::factory(10)->create();
+        CourseLecture::factory(10)->create();
+
     }
 }

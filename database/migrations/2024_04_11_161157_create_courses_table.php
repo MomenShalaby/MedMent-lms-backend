@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,17 +15,25 @@ return new class extends Migration {
         Schema::create('courses', function (Blueprint $table) {
 
             $table->id();
-            $table->foreignIdFor(User::class);
             $table->text('course_name');
-            $table->string('image')->nullable();
+            $table->text('course_title')->nullable();
             $table->longText('description')->nullable();
-            // $table->string('video')->nullable();
-            // $table->string('label')->nullable();
-            // $table->string('duration')->nullable();
-            // $table->string('resources')->nullable();
-            // $table->string('certificate')->nullable();
+            // $table->foreignId('categories_id');
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('categories');
+            // $table->foreignIdFor(Category::class);
 
-            // $table->tinyInteger('status')->default(0)->comment('0=Inactive', '1=Active');
+            $table->string('image')->nullable();
+            $table->string('instructor')->nullable();
+            $table->string('video')->nullable();
+            $table->string('label')->nullable();
+            $table->string('duration')->nullable();
+            $table->string('resources')->nullable();
+            $table->string('certificate')->nullable();
+            $table->text('prerequisites')->nullable();
+            $table->string('featured')->nullable();
+            $table->integer('price')->nullable();
+            $table->enum('status', ['inactive', 'active'])->default('inactive');
             $table->timestamps();
         });
     }

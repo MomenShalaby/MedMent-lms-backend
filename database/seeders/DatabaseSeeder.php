@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\Experience;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\CourseLectureFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -31,6 +32,8 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             SubCategorySeeder::class,
             CourseSeeder::class,
+            CourseSectionSeeder::class,
+            CourseLectureSeeder::class,
             EventSeeder::class,
             AttendeeSeeder::class,
         ]);
