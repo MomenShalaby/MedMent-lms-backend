@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,8 +19,21 @@ class CourseFactory extends Factory
     {
         return [
             'course_name' => fake()->unique()->sentence(3),
-            'description' => fake()->text,
-            'image' => fake()->imageUrl()
+            'course_title' => fake()->unique()->sentence(3),
+            'category_id' => Category::pluck('id')->random(),
+
+            'description' => fake()->text(),
+            // 'image' => fake()->imageUrl(),
+            'instructor' => fake()->name(),
+            'video' => fake()->url(),
+            'label' => fake()->sentence(3),
+            'duration' => fake()->time('H:i'),
+            'resources' => fake()->unique()->sentence(3),
+            'certificate' => fake()->unique()->sentence(3),
+            'prerequisites' => fake()->unique()->sentence(3),
+            'featured' => fake()->unique()->sentence(3),
+            'price' => fake()->numberBetween(5, 60),
+            'status' => $this->faker->randomElement(['Inactive', 'Active']),
         ];
     }
 }

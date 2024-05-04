@@ -84,8 +84,9 @@ Route::get('/courses', [CourseController::class, 'index']);
 Route::get('/courses/{course}', [CourseController::class, 'show']);
 Route::middleware('auth:admin')->controller(CourseController::class)->prefix('courses')->group(function () {
     Route::post('/', 'store')->middleware('permission:course-create');
-    Route::put('/{courses}', 'update')->middleware('permission:course-edit');
-    Route::delete('/{courses}', 'destroy')->middleware('permission:course-delete');
+    Route::put('/{course}', 'update')->middleware('permission:course-edit');
+    Route::put('/{course}/image', 'updateCourseImage')->middleware('permission:event-image-edit');
+    Route::delete('/{course}', 'destroy')->middleware('permission:course-delete');
 });
 
 //  events routes

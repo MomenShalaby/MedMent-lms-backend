@@ -16,16 +16,26 @@ class CourseResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+
+            // 'category' =>$this->categories_id,
             'id' => $this->id,
-            'course_name' => $this->course_name,
+            'name' => $this->course_name,
             'description' => $this->description,
             'image' => $this->image,
-            'images' => CourseImagesResource::collection($this->whenLoaded('images')),
+            'category' => new CategoryResource($this->whenLoaded('category')),
+            'instructor' => $this->instructor,
+            'title' => $this->course_title,
+            'video' => $this->video,
+            'label' => $this->label,
+            'duration' => $this->duration,
+            'resources' => $this->resources,
+            'certificate' => $this->certificate,
+            'price' => $this->price,
+            'prerequisites' => $this->prerequisites,
+            'featured' => $this->featured,
+            'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'user_id' => $this->user_id,
-            'user' => new UserResource($this->whenLoaded('user')),
-
         ];
     }
 }
