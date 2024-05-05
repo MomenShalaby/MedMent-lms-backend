@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Auth\UserAuthController;
 use App\Http\Controllers\Api\AttendeeController;
 use App\Http\Controllers\Api\Auth\VerifyEmailController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ContactUsController;
 use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\CountryStateController;
 use App\Http\Controllers\Api\CourseController;
@@ -114,6 +115,9 @@ Route::get('/verify-email/{id}/{hash}', [VerifyEmailController::class, 'verify']
     ->name('verification.verify');
 
 // 'throttle:6,1'
+
+//contact us form
+Route::post('/contactus', ContactUsController::class);
 
 
 
