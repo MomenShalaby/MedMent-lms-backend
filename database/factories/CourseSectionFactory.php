@@ -19,7 +19,7 @@ class CourseSectionFactory extends Factory
     {
         return [
             'course_id' => Course::pluck('id')->random(),
-            'title' => fake()->title()
+            'title' => fake()->sentence()
         ];
     }
 }

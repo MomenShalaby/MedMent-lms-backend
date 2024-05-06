@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AttendeeController;
 use App\Http\Controllers\Api\Auth\AdminAuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CourseLectureController;
+use App\Http\Controllers\Api\CourseSectionController;
 use App\Http\Controllers\Api\DegreeController;
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\EventController;
@@ -16,6 +18,7 @@ use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\UniversityController;
 use App\Http\Controllers\Api\UserController;
+use App\Models\CourseLecture;
 use Illuminate\Support\Facades\Route;
 
 //admin auth
@@ -89,6 +92,27 @@ Route::middleware('auth:admin')->controller(CourseController::class)->prefix('co
     Route::delete('/{course}', 'destroy')->middleware('permission:course-delete');
 });
 
+
+// courses sections routes
+Route::get('/courses/{course}/sections', [CourseSectionController::class, 'index']);
+Route::get('/courses/{course}/sections/{section}', [CourseSectionController::class, 'show'])->scopeBindings();
+
+Route::middleware('auth:admin')->controller(CourseSectionController::class)->prefix('/courses/{course}/sections')->scopeBindings()->group(function () {
+    Route::post('/', 'store')->middleware('permission:course-sections-create');
+    Route::put('/{section}', 'update')->middleware('permission:course-sections-edit');
+    Route::delete('/{section}', 'destroy')->middleware('permission:course-sections-delete');
+});
+
+// course section lectures routes
+Route::get('/courses/{course}/sections/{section}/lectures', [CourseLectureController::class, 'index']);
+Route::get('/courses/{course}/sections/{section}/lectures/{lecture}', [CourseLectureController::class, 'show']);
+Route::middleware('auth:admin')->controller(CourseLectureController::class)->prefix('/courses/{course}/sections/{section}/lectures')->group(function () {
+    Route::post('/', 'store')->middleware('permission:course-lectures-create');
+    Route::put('/{lecture}', 'update')->middleware('permission:course-lectures-edit');
+    // Route::put('/{course}/image', 'updateCourseImage')->middleware('permission:event-image-edit');
+    Route::delete('/{lecture}', 'destroy')->middleware('permission:course-lectures-delete');
+});
+
 //  events routes
 Route::get('/events', [EventController::class, 'index']);
 Route::get('/events/{event}', [EventController::class, 'show']);
@@ -100,7 +124,7 @@ Route::middleware('auth:admin')->controller(EventController::class)->prefix('eve
 });
 
 //  event attendees routes
-Route::middleware('auth:admin')->controller(AttendeeController::class)->prefix('/events/{event}/attendees')->group(function () {
+Route::middleware('auth:admin')->controller(AttendeeController::class)->prefix('/events/{event}/attendees')->scopeBindings()->group(function () {
     Route::get('/', 'index');
     Route::get('/{attendee}', 'show');
     // Route::post('/', 'store');

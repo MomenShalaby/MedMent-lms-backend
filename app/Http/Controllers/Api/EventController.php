@@ -29,7 +29,7 @@ class EventController extends Controller
     public function index()
     {
         $query = $this->loadRelationships(Event::query());
-        $events = EventResource::collection($query->paginate());
+        $events = EventResource::collection($query->latest()->paginate());
         return $this->success($events, "data is here", 200, true);
     }
 
