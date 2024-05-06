@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Subscription;
+use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SubscriptionController extends Controller
 {
@@ -18,7 +20,7 @@ class SubscriptionController extends Controller
         ]);
     }
 
-    public function update(Request $request, Subscription $subscription)
+    public function updatePrice(Request $request, Subscription $subscription)
     {
         $request->validate([
             'price' => ['required', 'decimal:0,2'],
@@ -32,4 +34,13 @@ class SubscriptionController extends Controller
         );
     }
 
+    public function selectSubscription(Request $request)
+    {
+        $request->validate([
+            'subscription_id' => ['required', 'exists:subscriptions,id'],
+        ]);
+
+        $request->user()->update([$request->subscription_id]);
+        return $this->success('', 'Subscriped successfully', 201);
+    }
 }

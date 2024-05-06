@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Admin extends Authenticatable implements JWTSubject
 {
@@ -46,6 +47,15 @@ class Admin extends Authenticatable implements JWTSubject
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected function avatar(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                return $value ? "/storage/avatars/$value" : "/admin.png";
+            }
+        );
     }
 
     /**

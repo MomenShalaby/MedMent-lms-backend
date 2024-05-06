@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Auth\UserAuthController;
 use App\Http\Controllers\Api\AttendeeController;
 use App\Http\Controllers\Api\Auth\VerifyEmailController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ContactUsController;
 use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\CountryStateController;
 use App\Http\Controllers\Api\CourseController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Api\EducationController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ExperienceController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\UniversityController;
 use Illuminate\Http\Request;
@@ -49,10 +51,17 @@ Route::middleware('auth:api')->controller(AttendeeController::class)->prefix('/e
 });
 
 Route::middleware('auth:api')->controller(ProfileController::class)->prefix('/profile')->group(function () {
-    Route::patch('/editinfo', 'updateInformation');
-    Route::put('/editpassword', 'updatePassword');
-    Route::post('/editavatar', 'updateAvatar');
+    Route::patch('/edit/info', 'updateInformation');
+    Route::patch('/edit/password', 'updatePassword');
+    Route::patch('/edit/avatar', 'updateAvatar');
+    Route::delete('/edit/avatar', 'deleteAvatar');
     Route::delete('/', 'destroy');
+});
+
+//subscription routes
+Route::get('/', [SubscriptionController::class, 'index'])->middleware('permission:subscription-viewall');
+Route::middleware('auth:api')->controller(SubscriptionController::class)->prefix('subscriptions')->group(function () {
+    Route::patch('/select', 'selectSubscription');
 });
 
 Route::middleware('auth:api')->controller(ExperienceController::class)->group(function () {
@@ -106,5 +115,10 @@ Route::get('/verify-email/{id}/{hash}', [VerifyEmailController::class, 'verify']
     ->name('verification.verify');
 
 // 'throttle:6,1'
+
+//contact us form
+Route::post('/contactus', ContactUsController::class);
+
+
 
 
