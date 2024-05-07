@@ -16,9 +16,9 @@ class CourseSectionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'course_id'=>$this->course_id,
+            'course_id' => $this->course_id,
             'title' => $this->title,
-            'lectures' => new CourseSectionLectureResource($this->whenLoaded('lectures')),
+            'lectures' =>  CourseSectionLectureResource::collection($this->whenLoaded('lectures')),
 
         ];
     }

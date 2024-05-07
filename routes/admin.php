@@ -88,7 +88,7 @@ Route::get('/courses/{course}', [CourseController::class, 'show']);
 Route::middleware('auth:admin')->controller(CourseController::class)->prefix('courses')->group(function () {
     Route::post('/', 'store')->middleware('permission:course-create');
     Route::put('/{course}', 'update')->middleware('permission:course-edit');
-    Route::put('/{course}/image', 'updateCourseImage')->middleware('permission:event-image-edit');
+    Route::put('/{course}/image', 'updateCourseImage')->middleware('permission:course-image-edit');
     Route::delete('/{course}', 'destroy')->middleware('permission:course-delete');
 });
 
@@ -104,12 +104,12 @@ Route::middleware('auth:admin')->controller(CourseSectionController::class)->pre
 });
 
 // course section lectures routes
-Route::get('/courses/{course}/sections/{section}/lectures', [CourseLectureController::class, 'index']);
-Route::get('/courses/{course}/sections/{section}/lectures/{lecture}', [CourseLectureController::class, 'show']);
-Route::middleware('auth:admin')->controller(CourseLectureController::class)->prefix('/courses/{course}/sections/{section}/lectures')->group(function () {
+Route::get('/courses/{course}/sections/{section}/lectures', [CourseLectureController::class, 'index'])->scopeBindings();
+Route::get('/courses/{course}/sections/{section}/lectures/{lecture}', [CourseLectureController::class, 'show'])->scopeBindings();
+Route::middleware('auth:admin')->controller(CourseLectureController::class)->prefix('/courses/{course}/sections/{section}/lectures')->scopeBindings()->group(function () {
     Route::post('/', 'store')->middleware('permission:course-lectures-create');
     Route::put('/{lecture}', 'update')->middleware('permission:course-lectures-edit');
-    // Route::put('/{course}/image', 'updateCourseImage')->middleware('permission:event-image-edit');
+    Route::put('/{lecture}/image', 'updateCourseImage')->middleware('permission:course-lecture-image-edit');
     Route::delete('/{lecture}', 'destroy')->middleware('permission:course-lectures-delete');
 });
 

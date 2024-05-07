@@ -11,11 +11,12 @@ trait FileUploader
         $requestFile = $request->file($inputName);
         try {
             $dir = 'public/files/' . $name;
-            $fixName = $data->id . '-' . $name . '.' . $requestFile->extension();
+            // $fixName = $data->id . '-' . $name . '.' . $requestFile->extension();
+            $fixName = $data->id . '-' . $name . '-' . uniqid() . '.' . $requestFile->extension();
 
             if ($requestFile) {
                 Storage::putFileAs($dir, $requestFile, $fixName);
-                $request->file = 'files/' . $name . '/' . $fixName;
+                $request->file = '/storage/files/' . $name . '/' . $fixName;
 
                 $data->update([
                     $inputName => $request->file,
@@ -31,14 +32,20 @@ trait FileUploader
     }
 
     // delete file
-    public function deleteFile($fileName = 'files')
+    public function deleteFile($fileUrl)
     {
         try {
-            if ($fileName) {
-                Storage::delete('public/files/' . $fileName);
+            $filePath = str_replace('/storage', 'public', $fileUrl);
+            if (Storage::exists($filePath)) {
+                Storage::delete($filePath);
+                return true;
             }
 
-            return true;
+            // if ($fileName) {
+            //     Storage::delete('public/storage/files/' . $fileName);
+            // }
+
+            return false;
         } catch (\Throwable $th) {
             report($th);
 
