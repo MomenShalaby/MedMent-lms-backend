@@ -67,13 +67,21 @@ class CourseLectureController extends Controller
 
     }
 
+    public function updateLectureVideo(CourseLectureRequest $request, Course $course, CourseSection $section, CourseLecture $lecture)
+    {
+
+        $this->deleteFile($lecture->video);
+        $this->uploadFile($request, $lecture, 'course-lecture', 'video');
+
+        return $this->success($lecture, "video updated", 202);
+
+    }
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Course $course, CourseSection $section, CourseLecture $lecture)
     {
         $this->deleteFile($lecture->video);
-        return $lecture->video;
         $lecture->delete();
         return response(status: 204);
     }

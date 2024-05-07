@@ -29,7 +29,7 @@ class CourseLectureRequest extends FormRequest
         return [
             'title' => 'sometimes|string|max:255',
             'content' => 'sometimes|string|max:1000',
-            'video' => 'sometimes|mimetypes:video/avi,video/mpeg,video/quicktime|max:102400'
+            'video' => 'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:102400'
 
         ];
     }

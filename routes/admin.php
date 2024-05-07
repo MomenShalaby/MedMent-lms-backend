@@ -109,7 +109,7 @@ Route::get('/courses/{course}/sections/{section}/lectures/{lecture}', [CourseLec
 Route::middleware('auth:admin')->controller(CourseLectureController::class)->prefix('/courses/{course}/sections/{section}/lectures')->scopeBindings()->group(function () {
     Route::post('/', 'store')->middleware('permission:course-lectures-create');
     Route::put('/{lecture}', 'update')->middleware('permission:course-lectures-edit');
-    Route::put('/{lecture}/image', 'updateCourseImage')->middleware('permission:course-lecture-image-edit');
+    Route::put('/{lecture}/video', 'updateLectureVideo')->middleware('permission:course-lecture-image-edit');
     Route::delete('/{lecture}', 'destroy')->middleware('permission:course-lectures-delete');
 });
 
