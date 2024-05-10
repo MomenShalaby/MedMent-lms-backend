@@ -102,7 +102,11 @@ Route::get('/subcategory/{subcategory}', [SubCategoryController::class, 'show'])
 Route::middleware('auth:api')->controller(TagController::class)->prefix('/tags')->group(function () {
     Route::get('/me', 'userIndex');
     Route::put('/me', 'userUpdate');
+    // Route::get('/', 'index');
+    // Route::get('/{tag}', 'show');
 });
+Route::get('/tags', [TagController::class, 'index']);
+Route::get('/tags/{tag}', [TagController::class, 'show']);
 
 
 //verify email

@@ -134,8 +134,8 @@ Route::middleware('auth:admin')->controller(AttendeeController::class)->prefix('
 
 //  tags routes
 Route::middleware('auth:admin')->controller(TagController::class)->prefix('/tags')->group(function () {
-    Route::get('/', 'index');
-    Route::get('/{tag}', 'show');
+    // Route::get('/', 'index');
+    // Route::get('/{tag}', 'show');
     Route::post('/', 'store');
     Route::put('/{tag}', 'update');
     Route::delete('/{tag}', 'destroy');
