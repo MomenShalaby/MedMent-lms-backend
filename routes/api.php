@@ -106,6 +106,7 @@ Route::middleware('auth:api')->controller(TagController::class)->prefix('/tags')
     // Route::get('/{tag}', 'show');
 });
 Route::get('/tags', [TagController::class, 'index']);
+Route::get('/tags/all', [TagController::class, 'all']);
 Route::get('/tags/{tag}', [TagController::class, 'show']);
 
 

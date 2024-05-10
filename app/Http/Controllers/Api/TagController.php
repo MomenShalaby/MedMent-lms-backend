@@ -21,6 +21,11 @@ class TagController extends Controller
         $tags = Tag::query()->paginate();
         return $this->success($tags, "data is here", 200, true);
     }
+    public function all()
+    {
+        $tags = Tag::all();
+        return $this->success($tags, "data is here", 200);
+    }
 
     /**
      * Store a newly created resource in storage.
