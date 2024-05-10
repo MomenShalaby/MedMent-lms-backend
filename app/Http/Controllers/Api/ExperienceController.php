@@ -50,6 +50,25 @@ class ExperienceController extends Controller
         ], 'Experience added successfully', 201);
 
     }
+    public function storeAll(Request $request)
+    {
+        $validated = $request->validate([
+            'experiences' => ['required', 'array'],
+            'experiences.*.title' => ['required', 'string', 'min:2'],
+            'experiences.*.start_date' => ['required', 'date'],
+            'experiences.*.end_date' => ['required', 'date', 'after:start_date'],
+            'experiences.*.description' => ['sometimes', 'string', 'min:10'],
+            'experiences.*.hospital_id' => ['required_without:experiences.*.otherHospital', 'prohibits:experiences.*.otherHospital', 'exists:hospitals,id'],
+            'experiences.*.otherHospital' => ['required_without:experiences.*.hospital_id', 'prohibits:experiences.*.hospital_id'],
+            'experiences.*.country_id' => ['required', 'exists:countries,id'],
+            'experiences.*.state_id' => ['required', 'exists:states,id'],
+        ]);
+        foreach ($validated['experiences'] as $experience) {
+            $experience['user_id'] = Auth::id();
+            Experience::create($experience);
+        }
+        return $this->success('', 'Experiences added successfully', 201);
+    }
 
     /**
      * Update the specified resource in storage.

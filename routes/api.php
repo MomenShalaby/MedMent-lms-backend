@@ -67,6 +67,7 @@ Route::middleware('auth:api')->controller(SubscriptionController::class)->prefix
 Route::middleware('auth:api')->controller(ExperienceController::class)->group(function () {
     Route::get('/users/{user}/experiences', 'index');
     Route::post('/experiences', 'store');
+    Route::post('/experiences/all', 'storeAll');
     Route::put('/experiences/{experience}', 'update')->middleware('can:update,experience');
     Route::delete('/experiences/{experience}', 'destroy')->middleware('can:delete,experience');
 });
@@ -87,8 +88,9 @@ Route::get('/degrees', [DegreeController::class, 'index']);
 Route::middleware('auth:api')->controller(EducationController::class)->group(function () {
     Route::get('/users/{user}/education', 'index');
     Route::post('/education', 'store');
+    Route::post('/education/all', 'storeAll');
     Route::put('/education/{education}', 'update')->middleware('can:update,education');
-    Route::delete('/education/{education}', 'destroy')->middleware('can:delete,education');
+    Route::delete('/education/{education}', 'destroy')->middleware('can:update,education');
 });
 
 // category routes

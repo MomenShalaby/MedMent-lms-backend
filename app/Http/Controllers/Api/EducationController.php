@@ -49,6 +49,25 @@ class EducationController extends Controller
         ], 'Education added successfully', 201);
 
     }
+    public function storeAll(Request $request)
+    {
+        $validated = $request->validate([
+            'education' => ['required', 'array'],
+            'education.*.degree_id' => ['required', 'exists:degrees,id'],
+            'education.*.start_date' => ['required', 'date'],
+            'education.*.end_date' => ['required', 'date', 'after:start_date'],
+            'education.*.description' => ['sometimes', 'string', 'min:10'],
+            'education.*.university_id' => ['required_without:education.*.other_university', 'prohibits:education.*.other_university', 'exists:universities,id'],
+            'education.*.other_university' => ['required_without:education.*.university_id', 'prohibits:education.*.university_id'],
+            'education.*.country_id' => ['required', 'exists:countries,id'],
+            'education.*.state_id' => ['required', 'exists:states,id'],
+        ]);
+        foreach ($validated['education'] as $education) {
+            $education['user_id'] = Auth::id();
+            Education::create($education);
+        }
+        return $this->success('', 'Education added successfully', 201);
+    }
 
     /**
      * Update the specified resource in storage.
