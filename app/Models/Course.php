@@ -48,10 +48,7 @@ class Course extends Model
     {
         return $this->hasMany(CourseSection::class);
     }
-    public function goals()
-    {
-        return $this->hasMany(CourseGoal::class);
-    }
+    
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

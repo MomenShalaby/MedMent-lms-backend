@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class CourseLecture extends Model
 {
     use HasFactory;
+    protected $fillable = ['title', 'content','video'];
 
     public function section()
     {

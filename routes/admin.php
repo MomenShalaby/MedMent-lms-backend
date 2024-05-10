@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\AdminProfileController;
 use App\Http\Controllers\Api\AttendeeController;
 use App\Http\Controllers\Api\Auth\AdminAuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CourseLectureController;
+use App\Http\Controllers\Api\CourseSectionController;
 use App\Http\Controllers\Api\DegreeController;
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\EventController;
@@ -17,6 +19,7 @@ use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\UniversityController;
 use App\Http\Controllers\Api\UserController;
+use App\Models\CourseLecture;
 use Illuminate\Support\Facades\Route;
 
 //admin auth
@@ -85,8 +88,29 @@ Route::get('/courses/{course}', [CourseController::class, 'show']);
 Route::middleware('auth:admin')->controller(CourseController::class)->prefix('courses')->group(function () {
     Route::post('/', 'store')->middleware('permission:course-create');
     Route::put('/{course}', 'update')->middleware('permission:course-edit');
-    Route::put('/{course}/image', 'updateCourseImage')->middleware('permission:event-image-edit');
+    Route::put('/{course}/image', 'updateCourseImage')->middleware('permission:course-image-edit');
     Route::delete('/{course}', 'destroy')->middleware('permission:course-delete');
+});
+
+
+// courses sections routes
+Route::get('/courses/{course}/sections', [CourseSectionController::class, 'index']);
+Route::get('/courses/{course}/sections/{section}', [CourseSectionController::class, 'show'])->scopeBindings();
+
+Route::middleware('auth:admin')->controller(CourseSectionController::class)->prefix('/courses/{course}/sections')->scopeBindings()->group(function () {
+    Route::post('/', 'store')->middleware('permission:course-sections-create');
+    Route::put('/{section}', 'update')->middleware('permission:course-sections-edit');
+    Route::delete('/{section}', 'destroy')->middleware('permission:course-sections-delete');
+});
+
+// course section lectures routes
+Route::get('/courses/{course}/sections/{section}/lectures', [CourseLectureController::class, 'index'])->scopeBindings();
+Route::get('/courses/{course}/sections/{section}/lectures/{lecture}', [CourseLectureController::class, 'show'])->scopeBindings();
+Route::middleware('auth:admin')->controller(CourseLectureController::class)->prefix('/courses/{course}/sections/{section}/lectures')->scopeBindings()->group(function () {
+    Route::post('/', 'store')->middleware('permission:course-lectures-create');
+    Route::put('/{lecture}', 'update')->middleware('permission:course-lectures-edit');
+    Route::put('/{lecture}/video', 'updateLectureVideo')->middleware('permission:course-lecture-image-edit');
+    Route::delete('/{lecture}', 'destroy')->middleware('permission:course-lectures-delete');
 });
 
 //  events routes
@@ -100,7 +124,7 @@ Route::middleware('auth:admin')->controller(EventController::class)->prefix('eve
 });
 
 //  event attendees routes
-Route::middleware('auth:admin')->controller(AttendeeController::class)->prefix('/events/{event}/attendees')->group(function () {
+Route::middleware('auth:admin')->controller(AttendeeController::class)->prefix('/events/{event}/attendees')->scopeBindings()->group(function () {
     Route::get('/', 'index');
     Route::get('/{attendee}', 'show');
     // Route::post('/', 'store');
@@ -110,8 +134,8 @@ Route::middleware('auth:admin')->controller(AttendeeController::class)->prefix('
 
 //  tags routes
 Route::middleware('auth:admin')->controller(TagController::class)->prefix('/tags')->group(function () {
-    Route::get('/', 'index');
-    Route::get('/{tag}', 'show');
+    // Route::get('/', 'index');
+    // Route::get('/{tag}', 'show');
     Route::post('/', 'store');
     Route::put('/{tag}', 'update');
     Route::delete('/{tag}', 'destroy');

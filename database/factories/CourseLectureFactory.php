@@ -19,9 +19,9 @@ class CourseLectureFactory extends Factory
     {
         return [
             'course_section_id' => CourseSection::pluck('id')->random(),
-            'title' => fake()->title(),
+            'title' => fake()->sentence(3),
             'content' => fake()->sentence(),
-            'video_url' => fake()->url()
+            'video' => fake()->url()
         ];
     }
 }
