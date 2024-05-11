@@ -55,6 +55,7 @@ Route::middleware('auth:api')->controller(UserProfileController::class)->prefix(
     Route::patch('/edit/avatar', 'updateAvatar');
     Route::delete('/edit/avatar', 'deleteAvatar');
     Route::delete('/', 'destroy');
+    Route::get('index', 'index');
 });
 
 //subscription routes

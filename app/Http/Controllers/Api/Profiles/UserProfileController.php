@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Profiles;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
@@ -17,6 +18,16 @@ use Illuminate\Validation\Rule;
 class UserProfileController extends Controller
 {
     use HttpResponses;
+    private $relations = ['subscription', 'country', 'state', 'experiences', 'experiences.hospital', 'experiences.country', 'experiences.state', 'education', 'education.degree', 'education.university', 'tags'];
+
+    public function index()
+    {
+        $user = Auth::user()->load($this->relations);
+        return $this->success([
+            'user' => new UserResource($user),
+            // 'token' => $token,
+        ]);
+    }
     public function updateInformation(Request $request)
     {
         $validated = $request->validate([
