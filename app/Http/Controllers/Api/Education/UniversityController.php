@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Education;
 
 use App\Http\Controllers\Controller;
-use App\Models\Hospital;
+use App\Models\University;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class HospitalController extends Controller
+class UniversityController extends Controller
 {
     use HttpResponses;
     /**
@@ -16,12 +15,10 @@ class HospitalController extends Controller
      */
     public function index()
     {
-        // return Auth::user()->getAllPermissions();
-        $hospitals = Hospital::all();
+        $universities = University::all();
         return $this->success([
-            'hospitals' => $hospitals,
+            'universities' => $universities,
         ]);
-
     }
 
     /**
@@ -33,15 +30,15 @@ class HospitalController extends Controller
             'name' => ['required', 'string', 'min:3'],
         ]);
 
-        $hospital = Hospital::create([
+        $university = University::create([
             'name' => $request->name,
         ]);
 
         return $this->success(
             [
-                "hospital" => $hospital,
+                "university" => $university,
             ],
-            'Hospital created successfully',
+            'University created successfully',
             201
         );
     }
@@ -49,31 +46,30 @@ class HospitalController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Hospital $hospital)
+    public function update(Request $request, University $university)
     {
         $request->validate([
             'name' => ['required', 'string', 'min:3'],
         ]);
 
-        $hospital->update([
+        $university->update([
             'name' => $request->name,
         ]);
 
         return $this->success(
             [
-                "hospital" => $hospital,
+                "university" => $university,
             ],
-            'Hospital updated successfully',
+            'University updated successfully',
         );
-
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Hospital $hospital)
+    public function destroy(University $university)
     {
-        $hospital->delete();
-        return $this->success('', 'Hospital Deleted Successfully');
+        $university->delete();
+        return $this->success('', 'University Deleted Successfully');
     }
 }

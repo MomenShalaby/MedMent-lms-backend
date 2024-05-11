@@ -1,25 +1,22 @@
 <?php
 
-use App\Http\Controllers\Api\AdminController;
-use App\Http\Controllers\Api\AdminProfileController;
-use App\Http\Controllers\Api\AttendeeController;
+use App\Http\Controllers\Api\Admin\AdminController;
+use App\Http\Controllers\Api\Admin\PermissionController;
+use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Auth\AdminAuthController;
-use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\CourseLectureController;
-use App\Http\Controllers\Api\CourseSectionController;
-use App\Http\Controllers\Api\DegreeController;
-use App\Http\Controllers\Api\CourseController;
-use App\Http\Controllers\Api\EventController;
-use App\Http\Controllers\Api\SubCategoryController;
-
-use App\Http\Controllers\Api\HospitalController;
-use App\Http\Controllers\Api\PermissionController;
-use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\Course\CategoryController;
+use App\Http\Controllers\Api\Course\CourseController;
+use App\Http\Controllers\Api\Course\CourseLectureController;
+use App\Http\Controllers\Api\Course\CourseSectionController;
+use App\Http\Controllers\Api\Course\SubCategoryController;
+use App\Http\Controllers\Api\Education\DegreeController;
+use App\Http\Controllers\Api\Education\UniversityController;
+use App\Http\Controllers\Api\Event\AttendeeController;
+use App\Http\Controllers\Api\Event\EventController;
+use App\Http\Controllers\Api\Event\TagController;
+use App\Http\Controllers\Api\Experience\HospitalController;
+use App\Http\Controllers\Api\Profiles\AdminProfileController;
 use App\Http\Controllers\Api\SubscriptionController;
-use App\Http\Controllers\Api\TagController;
-use App\Http\Controllers\Api\UniversityController;
-use App\Http\Controllers\Api\UserController;
-use App\Models\CourseLecture;
 use Illuminate\Support\Facades\Route;
 
 //admin auth

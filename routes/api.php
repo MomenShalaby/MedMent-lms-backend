@@ -3,23 +3,21 @@
 use App\Http\Controllers\Api\auth\ForgotPasswordController;
 use App\Http\Controllers\Api\auth\ResetPasswordController;
 use App\Http\Controllers\Api\Auth\UserAuthController;
-use App\Http\Controllers\Api\AttendeeController;
 use App\Http\Controllers\Api\Auth\VerifyEmailController;
-use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ContactUsController;
-use App\Http\Controllers\Api\CountryController;
-use App\Http\Controllers\Api\CountryStateController;
-use App\Http\Controllers\Api\CourseController;
-use App\Http\Controllers\Api\SubCategoryController;
-use App\Http\Controllers\Api\DegreeController;
-use App\Http\Controllers\Api\EducationController;
-use App\Http\Controllers\Api\EventController;
-use App\Http\Controllers\Api\ExperienceController;
-use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\Course\CategoryController;
+use App\Http\Controllers\Api\Course\SubCategoryController;
+use App\Http\Controllers\Api\Education\DegreeController;
+use App\Http\Controllers\Api\Education\EducationController;
+use App\Http\Controllers\Api\Education\UniversityController;
+use App\Http\Controllers\Api\Event\AttendeeController;
+use App\Http\Controllers\Api\Event\TagController;
+use App\Http\Controllers\Api\Experience\ExperienceController;
+use App\Http\Controllers\Api\Location\CountryController;
+use App\Http\Controllers\Api\Location\CountryStateController;
+use App\Http\Controllers\Api\Profiles\UserProfileController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\SubscriptionController;
-use App\Http\Controllers\Api\TagController;
-use App\Http\Controllers\Api\UniversityController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -51,7 +49,7 @@ Route::middleware('auth:api')->controller(AttendeeController::class)->prefix('/e
 
 });
 
-Route::middleware('auth:api')->controller(ProfileController::class)->prefix('/profile')->group(function () {
+Route::middleware('auth:api')->controller(UserProfileController::class)->prefix('/profile')->group(function () {
     Route::patch('/edit/info', 'updateInformation');
     Route::patch('/edit/password', 'updatePassword');
     Route::patch('/edit/avatar', 'updateAvatar');
@@ -71,10 +69,6 @@ Route::middleware('auth:api')->controller(ExperienceController::class)->group(fu
     Route::post('/experiences/all', 'storeAll');
     Route::put('/experiences/{experience}', 'update')->middleware('can:update,experience');
     Route::delete('/experiences/{experience}', 'destroy')->middleware('can:delete,experience');
-});
-
-Route::controller(ProfileController::class)->prefix('profile/{user}')->group(function () {
-    Route::get('/', 'index')->name('index');
 });
 
 

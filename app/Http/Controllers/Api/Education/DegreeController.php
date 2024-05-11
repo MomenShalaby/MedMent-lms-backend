@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Education;
 
 use App\Http\Controllers\Controller;
-use App\Models\University;
+use App\Models\Degree;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 
-class UniversityController extends Controller
+class DegreeController extends Controller
 {
     use HttpResponses;
     /**
@@ -15,9 +15,9 @@ class UniversityController extends Controller
      */
     public function index()
     {
-        $universities = University::all();
+        $degree = Degree::all();
         return $this->success([
-            'universities' => $universities,
+            'degree' => $degree,
         ]);
     }
 
@@ -30,46 +30,54 @@ class UniversityController extends Controller
             'name' => ['required', 'string', 'min:3'],
         ]);
 
-        $university = University::create([
+        $degree = Degree::create([
             'name' => $request->name,
         ]);
 
         return $this->success(
             [
-                "university" => $university,
+                "degree" => $degree,
             ],
-            'University created successfully',
+            'Degree created successfully',
             201
         );
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, University $university)
+    public function update(Request $request, Degree $degree)
     {
         $request->validate([
             'name' => ['required', 'string', 'min:3'],
         ]);
 
-        $university->update([
+        $degree->update([
             'name' => $request->name,
         ]);
 
         return $this->success(
             [
-                "university" => $university,
+                "degree" => $degree,
             ],
-            'University updated successfully',
+            'Degree updated successfully',
         );
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(University $university)
+    public function destroy(Degree $degree)
     {
-        $university->delete();
-        return $this->success('', 'University Deleted Successfully');
+        $degree->delete();
+        return $this->success('', 'Degree Deleted Successfully');
     }
 }

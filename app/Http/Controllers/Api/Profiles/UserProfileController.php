@@ -1,27 +1,49 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Profiles;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rule;
 
-class AdminProfileController extends Controller
+class UserProfileController extends Controller
 {
     use HttpResponses;
+    public function updateInformation(Request $request)
+    {
+        $validated = $request->validate([
+            'fname' => ['required_without_all:lname,email', 'string', 'max:30'],
+            'lname' => ['required_without_all:fname,email', 'string', 'max:30'],
+            'email' => ['required_without_all:fname,lname', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($request->user()->id)],
+        ]);
+        $request->user()->fill($validated);
+
+        if ($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
+        }
+
+        $request->user()->save();
+
+        return $this->success('', 'Profile updated successfully');
+
+    }
+
     public function updatePassword(Request $request)
     {
         $validated = $request->validate([
             'current_password' => ['required', 'current_password'],
             'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
-        Auth::guard('admin')->user()->update([
+
+        $request->user()->update([
             'password' => Hash::make($validated['password']),
         ]);
 
@@ -34,7 +56,7 @@ class AdminProfileController extends Controller
         $request->validate([
             'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:3000'],
         ]);
-        $user = Auth::guard('admin')->user();
+        $user = Auth::user();
 
         if ($request->hasFile('avatar')) {
             //save image in storage
@@ -59,11 +81,26 @@ class AdminProfileController extends Controller
         }
     }
 
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'current_password'],
+        ]);
+
+        $user = $request->user();
+
+        Auth::logout();
+
+        $user->delete();
+
+        return $this->success('', 'Account deleted successfully');
+    }
+
     public function deleteAvatar(Request $request)
     {
-        $user = Auth::guard('admin')->user();
+        $user = Auth::user();
         $avatar = $user->avatar;
-        if ($avatar === '/admin.png') {
+        if ($avatar === '/fdoctor.png' || $avatar === '/doctor.png') {
             return $this->error("default avatar can't be deleted", 409);
         }
         $avatar = str_replace('/storage', 'public', $avatar);
