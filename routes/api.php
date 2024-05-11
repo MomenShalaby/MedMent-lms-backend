@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\EducationController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ExperienceController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\UniversityController;
@@ -125,6 +126,8 @@ Route::get('/verify-email/{id}/{hash}', [VerifyEmailController::class, 'verify']
 
 //contact us form
 Route::post('/contactus', ContactUsController::class);
+
+Route::get('search/{term}', SearchController::class);
 
 
 

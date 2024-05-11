@@ -9,10 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Laravel\Scout\Searchable;
 
 class Course extends Model
 {
     use HasFactory;
+    use Searchable;
     // use HasUuids;
 
     protected $fillable = [
@@ -35,6 +37,15 @@ class Course extends Model
     ];
 
 
+    public function toSearchableArray()
+    {
+        return [
+            'course_name' => $this->course_name,
+            'description' => $this->description,
+            'course_title' => $this->course_title,
+            'label' => $this->label,
+        ];
+    }
     protected function image(): Attribute
     {
         return Attribute::make(function ($value, $attributes) {
@@ -48,7 +59,7 @@ class Course extends Model
     {
         return $this->hasMany(CourseSection::class);
     }
-    
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
