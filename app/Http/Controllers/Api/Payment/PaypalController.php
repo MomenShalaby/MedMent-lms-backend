@@ -51,7 +51,7 @@ class PaypalController extends Controller
     }
     private function createPaypalOrder($request)
     {
-        $price = $request->price;
+        $price = $request->value;
         $data = [
             "intent" => "CAPTURE",
             "purchase_units" => [

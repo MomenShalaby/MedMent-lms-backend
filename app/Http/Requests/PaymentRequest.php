@@ -22,7 +22,7 @@ class PaymentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'price' => 'required|numeric'
+            'value' => 'required|numeric'
         ];
     }
 }
