@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\Experience\ExperienceController;
 use App\Http\Controllers\Api\Location\CountryController;
 use App\Http\Controllers\Api\Location\CountryStateController;
 use App\Http\Controllers\Api\Profiles\UserProfileController;
+use App\Http\Controllers\Api\Payment\PaypalController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\SubscriptionController;
 use Illuminate\Http\Request;
@@ -126,5 +127,9 @@ Route::get('search/{term}', SearchController::class);
 
 
 
+// paypal payment 
 
-
+Route::middleware('auth:api')->controller(PaypalController::class)->prefix('/payment/paypal')->group(function () {
+    Route::post('/create-order', 'processTransaction');
+    Route::post('/capture-order', 'successTransaction');
+});
