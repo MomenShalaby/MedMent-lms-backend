@@ -33,7 +33,9 @@ class PaypalController extends Controller
     public function successTransaction(Request $request)
     {
         // $data = json_decode($request->getContent());
-        $orderId = $request->orderId;
+        // $orderId = $request->orderId;
+        $data = json_decode($request->getContent(), true);
+        $orderId = $data['orderId'];
 
         $result = $this->capturePaypalPayment($orderId);
 
