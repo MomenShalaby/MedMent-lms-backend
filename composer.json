@@ -13,6 +13,7 @@
         "laravel/scout": "^10.9",
         "laravel/tinker": "^2.9",
         "spatie/laravel-permission": "^6.7",
+        "srmklive/paypal": "~3.0",
         "tymon/jwt-auth": "^2.1"
     },
     "require-dev": {
