@@ -25,7 +25,7 @@ class PaypalController extends Controller
     }
     public function processTransaction(PaymentRequest $request)
     {
-        
+
         $order = $this->createPaypalOrder($request);
         return $this->success($order, "data is here", 200);
 
