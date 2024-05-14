@@ -52,7 +52,7 @@ class CourseRequest extends FormRequest
             'certificate' => 'sometimes|string',
             'prerequisites' => 'sometimes|string',
             'featured' => 'sometimes|string',
-            'status' => 'sometimes|in:Inactive,Active',
+            'status' => 'sometimes|in:inactive,active',
         ];
     }
 
