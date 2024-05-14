@@ -9,18 +9,27 @@ use App\Models\Category;
 use App\Traits\FileUploader;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
+use App\Traits\CanLoadRelationships;
 
 class CategoryController extends Controller
 {
     use HttpResponses;
     use FileUploader;
+    use CanLoadRelationships;
+
+    private array $relations = ['courses'];
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $category = CategoryResource::collection(Category::all());
-        return $this->success($category, "data is here", 200);
+        // $category = CategoryResource::collection(Category::all());
+        // return $this->success($category, "data is here", 200);
+        $query = $this->loadRelationships(Category::query());
+        $categorys = CategoryResource::collection($query->paginate());
+        return $this->success($categorys, "data is here", 200, true);
+   
     }
 
     /**
@@ -46,10 +55,13 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        $category = new CategoryResource($category);
-        return $this->success($category, "data is here", 200);
+        // $category = new CategoryResource($category);
+        // return $this->success($category, "data is here", 200);
 
-    }
+        $query = $this->loadRelationships($category);
+        $categorys = new CategoryResource($query);
+        return $this->success($categorys, "data is here", 200);
+       }
 
     /**
      * Update the specified resource in storage.
