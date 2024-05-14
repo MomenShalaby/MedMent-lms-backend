@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use App\Traits\FileUploader;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
     use HttpResponses;
+    use FileUploader;
     /**
      * Display a listing of the resource.
      */
@@ -30,7 +32,8 @@ class CategoryController extends Controller
         $category = Category::create(
             $request->all()
         );
-
+        $this->uploadImage($request, $category, "category", $inputName = 'image');
+        // return $category->image;
         return $this->success(
             new CategoryResource($category),
             'Category created successfully',
@@ -64,11 +67,20 @@ class CategoryController extends Controller
         );
     }
 
+    public function updateCategoryImage(CategoryRequest $request, Category $category)
+    {
+
+        $this->deleteImage($category->image);
+        $this->uploadImage($request, $category, 'category');
+        return $this->success($category, "image updated", 202);
+
+    }
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Category $category)
     {
+        $this->deleteImage($category->image);
         $category->delete();
         return $this->success('', 'Category Deleted Successfully');
     }

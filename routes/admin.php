@@ -68,6 +68,7 @@ Route::middleware('auth:admin')->controller(DegreeController::class)->prefix('de
 Route::middleware('auth:admin')->controller(CategoryController::class)->prefix('category')->group(function () {
     Route::post('/', 'store')->middleware('permission:category-create');
     Route::put('/{category}', 'update')->middleware('permission:category-edit');
+    Route::put('/{category}/image', 'updateCategoryImage')->middleware('permission:category-edit');
     Route::delete('/{category}', 'destroy')->middleware('permission:category-delete');
 });
 
