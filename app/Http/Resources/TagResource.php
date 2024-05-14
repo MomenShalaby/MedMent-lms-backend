@@ -17,6 +17,8 @@ class TagResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'events' => EventResource::collection($this->whenLoaded('events')),
+            
         ];
     }
 }

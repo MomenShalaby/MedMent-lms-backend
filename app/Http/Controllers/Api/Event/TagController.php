@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Event;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TagRequest;
+use App\Http\Resources\TagResource;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
@@ -12,14 +13,22 @@ use Illuminate\Support\Facades\Auth;
 
 class TagController extends Controller
 {
+    use CanLoadRelationships;
     use HttpResponses;
+
+    private array $relations = ['events'];
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $tags = Tag::query()->paginate();
+        // $tags = Tag::query()->paginate();
+        // return $this->success($tags, "data is here", 200, true);
+        $query = $this->loadRelationships(Tag::query());
+        $tags = TagResource::collection($query->paginate());
         return $this->success($tags, "data is here", 200, true);
+
     }
     public function all()
     {
@@ -44,7 +53,11 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        return $this->success($tag, "data is here", 200);
+        // return $this->success($tag, "data is here", 200);
+        $query = $this->loadRelationships($tag);
+        $tags = new TagResource($query);
+        return $this->success($tags, "data is here", 200);
+      
     }
 
     /**
