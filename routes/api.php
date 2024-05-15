@@ -53,7 +53,7 @@ Route::middleware('auth:api')->controller(AttendeeController::class)->prefix('/e
 Route::middleware('auth:api')->controller(UserProfileController::class)->prefix('/profile')->group(function () {
     Route::patch('/edit/info', 'updateInformation');
     Route::patch('/edit/password', 'updatePassword');
-    Route::patch('/edit/avatar', 'updateAvatar');
+    Route::post('/edit/avatar', 'updateAvatar');
     Route::delete('/edit/avatar', 'deleteAvatar');
     Route::delete('/', 'destroy');
     Route::get('index', 'index');
@@ -127,7 +127,7 @@ Route::get('search/{term}', SearchController::class);
 
 
 
-// paypal payment 
+// paypal payment
 
 Route::middleware('auth:api')->controller(PaypalController::class)->prefix('/payment/paypal')->group(function () {
     Route::post('/create-order', 'processTransaction');
