@@ -36,6 +36,7 @@ class StoreUserRequest extends FormRequest
             // 'subscription_id' => ['required', 'exists:subscriptions,id'],
             'country_id' => ['sometimes', 'exists:countries,id'],
             'state_id' => ['sometimes', 'exists:states,id'],
+            'bio' => ['sometimes', 'string'],
         ];
     }
 }
