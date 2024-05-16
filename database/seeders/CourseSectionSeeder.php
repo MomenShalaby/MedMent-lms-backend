@@ -13,7 +13,7 @@ class CourseSectionSeeder extends Seeder
      */
     public function run(): void
     {
-        CourseSection::factory(10)->create();
+        CourseSection::factory(50)->create();
 
     }
 }

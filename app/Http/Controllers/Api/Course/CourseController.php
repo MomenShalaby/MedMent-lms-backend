@@ -29,7 +29,7 @@ class CourseController extends Controller
     public function index()
     {
         $query = $this->loadRelationships(Course::query());
-        $courses = CourseResource::collection($query->paginate());
+        $courses = CourseResource::collection($query->latest()->paginate());
         return $this->success($courses, "data is here", 200, true);
     }
 

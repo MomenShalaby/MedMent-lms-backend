@@ -21,7 +21,7 @@ class CourseLectureFactory extends Factory
             'course_section_id' => CourseSection::pluck('id')->random(),
             'title' => fake()->sentence(3),
             'content' => fake()->sentence(),
-            'video' => fake()->url()
+            'video' => "https://www.youtube.com/embed/mzPu7q6GNQA?si=JZTIjzdMxgyrvK6x",
         ];
     }
 }
