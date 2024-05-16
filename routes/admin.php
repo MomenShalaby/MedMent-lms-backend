@@ -142,6 +142,6 @@ Route::middleware('auth:admin')->controller(TagController::class)->prefix('/tags
 //profile
 Route::middleware('auth:admin')->controller(AdminProfileController::class)->prefix('admin/profile/edit')->group(function () {
     Route::patch('/password', 'updatePassword');
-    Route::patch('/avatar', 'updateAvatar');
+    Route::post('/avatar', 'updateAvatar');
     Route::delete('/avatar', 'deleteAvatar');
 });

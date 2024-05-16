@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Profiles;
 
+use App\Enums\Enums\Gender;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -31,9 +32,13 @@ class UserProfileController extends Controller
     public function updateInformation(Request $request)
     {
         $validated = $request->validate([
-            'fname' => ['required_without_all:lname,email', 'string', 'max:30'],
-            'lname' => ['required_without_all:fname,email', 'string', 'max:30'],
-            'email' => ['required_without_all:fname,lname', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($request->user()->id)],
+            'fname' => ['required_without_all:lname,email,gender,country_id,state_id,bio', 'string', 'max:30'],
+            'lname' => ['required_without_all:fname,email,gender,country_id,state_id,bio', 'string', 'max:30'],
+            'email' => ['required_without_all:fname,lname,gender,country_id,state_id,bio', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($request->user()->id)],
+            'gender' => ['required_without_all:fname,lname,email,country_id,state_id,bio', Rule::enum(Gender::class)],
+            'country_id' => ['required_without_all:fname,lname,email,gender,state_id,bio', 'exists:countries,id'],
+            'state_id' => ['required_without_all:fname,lname,email,gender,country_id,bio', 'exists:states,id'],
+            'bio' => ['required_without_all:fname,lname,email,gender,country_id,state_id', 'string'],
         ]);
         $request->user()->fill($validated);
 
